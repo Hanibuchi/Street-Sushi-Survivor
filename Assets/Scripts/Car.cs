@@ -4,6 +4,7 @@ public class Car : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private LayerMask _groundLayer;
 
     [Header("Explosion Settings")]
     [SerializeField] private GameObject _explosionPrefab;
@@ -27,6 +28,17 @@ public class Car : MonoBehaviour
         {
             Vector3 nextPosition = _carRigidbody.position + transform.forward * _moveSpeed * Time.fixedDeltaTime;
             _carRigidbody.MovePosition(nextPosition);
+        }
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (_isExploded) return;
+
+        // 指定したLayer以外のオブジェクトと衝突したら爆発
+        if (((1 << collision.gameObject.layer) & _groundLayer) == 0)
+        {
+            Explode();
         }
     }
 
