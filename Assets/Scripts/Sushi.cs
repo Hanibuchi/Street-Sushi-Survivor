@@ -2,10 +2,18 @@ using UnityEngine;
 
 public class Sushi : MonoBehaviour
 {
-    private bool _isProcessed = false;
-    [SerializeField] Animator _animator;
+    [Header("Sushi Properties")]
+    [SerializeField] private int _points = 1;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private GameObject _rootObject;
 
+    private bool _isProcessed = false;
     private float _timer = 0f;
+
+    /// <summary>
+    /// この寿司を食べた時に得られるポイント
+    /// </summary>
+    public int Points => _points;
 
     private void Update()
     {
@@ -58,13 +66,19 @@ public class Sushi : MonoBehaviour
         }
     }
 
-    [SerializeField] GameObject rootObject;
     /// <summary>
     /// アニメーションイベントから呼び出される削除メソッド。
     /// EatとDespawnの両方で共通して使用できます。
     /// </summary>
     public void OnAnimationComplete()
     {
-        Destroy(rootObject);
+        if (_rootObject != null)
+        {
+            Destroy(_rootObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
