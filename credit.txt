@@ -31,3 +31,7 @@ Standard Unity Asset Store EULA
 - FREE Casual Game SFX Pack by Dustyroom
 https://assetstore.unity.com/packages/audio/sound-fx/free-casual-game-sfx-pack-54116
 Standard Unity Asset Store EULA
+
+- Vehicle - Essentials by Nox_Sound
+https://assetstore.unity.com/packages/audio/sound-fx/transportation/vehicle-essentials-194951
+Standard Unity Asset Store EULA
