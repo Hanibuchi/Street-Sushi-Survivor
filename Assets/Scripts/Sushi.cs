@@ -4,6 +4,7 @@ public class Sushi : MonoBehaviour
 {
     [Header("Sushi Properties")]
     [SerializeField] private int _points = 1;
+    [SerializeField] private bool _isWasabi = false;
     [SerializeField] private Animator _animator;
     [SerializeField] private GameObject _rootObject;
 
@@ -14,6 +15,11 @@ public class Sushi : MonoBehaviour
     /// この寿司を食べた時に得られるポイント
     /// </summary>
     public int Points => _points;
+
+    /// <summary>
+    /// これがワサビ（障害物）かどうか
+    /// </summary>
+    public bool IsWasabi => _isWasabi;
 
     private void Update()
     {
