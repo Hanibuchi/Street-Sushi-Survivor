@@ -101,3 +101,5 @@ InitTestScene*.unity*
 # Audio files and Sound folder (should not be versioned)
 /[Aa]ssets/Packs
 
+Prefabs
+Materials
