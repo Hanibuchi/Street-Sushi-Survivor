@@ -1,0 +1,124 @@
+using UnityEngine;
+
+public class Car : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    [SerializeField] private float _moveSpeed = 5f;
+
+    [Header("Explosion Settings")]
+    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private Rigidbody _carRigidbody;
+    [SerializeField] private float _explosionForce = 20f;
+    [SerializeField] private GameObject _rootObject;
+    [SerializeField] private float _destroyDelay = 5f;
+
+    [Header("Animation & Audio")]
+    [SerializeField] private Animator _animator;
+    [SerializeField] private AudioClip _hornClip;
+
+    private bool _isExploded = false;
+
+    private void FixedUpdate()
+    {
+        if (_isExploded) return;
+
+        // Rigidbodyを使用して前進し続ける
+        if (_carRigidbody != null)
+        {
+            Vector3 nextPosition = _carRigidbody.position + transform.forward * _moveSpeed * Time.fixedDeltaTime;
+            _carRigidbody.MovePosition(nextPosition);
+        }
+    }
+
+    /// <summary>
+    /// クラクションを鳴らすアニメーションを再生します。
+    /// </summary>
+    public void TriggerHornAnimation()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Horn");
+        }
+    }
+
+    /// <summary>
+    /// 熊にぶつかった時に呼び出される爆発演出メソッド
+    /// </summary>
+    public void Explode()
+    {
+        if (_isExploded) return;
+        _isExploded = true;
+
+        // 爆発アニメーションの再生
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Explode");
+        }
+
+        // 爆発エフェクトの生成
+        if (_explosionPrefab != null)
+        {
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        // Rigidbodyを有効にして吹き飛ばす
+        if (_carRigidbody != null)
+        {
+            _carRigidbody.isKinematic = false;
+            _carRigidbody.useGravity = true;
+
+            // 上方向へのランダムな力を加えて派手に飛ばす
+            Vector3 force = Vector3.up * _explosionForce;
+            force += new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * (_explosionForce * 0.5f);
+
+            _carRigidbody.AddForce(force, ForceMode.Impulse);
+            _carRigidbody.AddTorque(Random.insideUnitSphere * _explosionForce, ForceMode.Impulse);
+        }
+
+        // 一定時間後に削除用アニメーションをトリガー
+        Invoke(nameof(TriggerDestroyAnimation), _destroyDelay);
+    }
+
+    /// <summary>
+    /// 削除用アニメーションを再生します。
+    /// </summary>
+    private void TriggerDestroyAnimation()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Destroy");
+        }
+        else
+        {
+            // アニメーターがない場合は即座に削除
+            OnDestroyAnimationComplete();
+        }
+    }
+
+    /// <summary>
+    /// アニメーションイベントから呼び出される最終的な削除メソッド
+    /// </summary>
+    public void OnDestroyAnimationComplete()
+    {
+        if (_rootObject != null)
+        {
+            Destroy(_rootObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// アニメーションイベントから呼び出されるクラクション再生メソッド
+    /// </summary>
+    public void PlayHorn()
+    {
+        Debug.Log($"SoundManager: {SoundManager.Instance != null}, HornClip: {_hornClip != null}");
+        if (SoundManager.Instance != null && _hornClip != null)
+        {
+            SoundManager.Instance.PlaySE(_hornClip);
+        }
+    }
+}
