@@ -112,4 +112,54 @@ public class SoundManager : MonoBehaviour
         if (_seSource == null || clip == null) return;
         _seSource.PlayOneShot(clip, _seVolume * volumeScale);
     }
+
+    #region Test Methods
+
+    [Header("Test Assets")]
+    [SerializeField] private AudioClip _testBgmClip;
+    [SerializeField] private AudioClip _testSeClip;
+
+    /// <summary>
+    /// テスト用BGM再生
+    /// </summary>
+    public void test_PlayBgm()
+    {
+        PlayBGM(_testBgmClip);
+    }
+
+    /// <summary>
+    /// テスト用BGM停止
+    /// </summary>
+    public void test_StopBgm()
+    {
+        StopBGM();
+    }
+
+    /// <summary>
+    /// テスト用SE再生
+    /// </summary>
+    public void test_PlaySe()
+    {
+        PlaySE(_testSeClip);
+    }
+
+    /// <summary>
+    /// テスト用BGM音量設定
+    /// </summary>
+    /// <param name="volume">音量（0.0 ～ 1.0）</param>
+    public void test_SetBgmVolume(float volume)
+    {
+        BGMVolume = volume;
+    }
+
+    /// <summary>
+    /// テスト用SE音量設定
+    /// </summary>
+    /// <param name="volume">音量（0.0 ～ 1.0）</param>
+    public void test_SetSeVolume(float volume)
+    {
+        SEVolume = volume;
+    }
+
+    #endregion
 }
