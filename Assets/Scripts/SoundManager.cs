@@ -105,9 +105,11 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// SEを再生します。
     /// </summary>
-    public void PlaySE(AudioClip clip)
+    /// <param name="clip">再生するオーディオクリップ</param>
+    /// <param name="volumeScale">音量の倍率（デフォルトは1.0）</param>
+    public void PlaySE(AudioClip clip, float volumeScale = 1f)
     {
         if (_seSource == null || clip == null) return;
-        _seSource.PlayOneShot(clip, _seVolume);
+        _seSource.PlayOneShot(clip, _seVolume * volumeScale);
     }
 }
