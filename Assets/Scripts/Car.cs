@@ -13,6 +13,10 @@ public class Car : MonoBehaviour
     [SerializeField] private GameObject _rootObject;
     [SerializeField] private float _destroyDelay = 5f;
 
+    [Header("Sushi Settings")]
+    [SerializeField] private GameObject _sushiOnRoof;
+    [SerializeField] private GameObject _sushiPrefab;
+
     [Header("Animation & Audio")]
     [SerializeField] private Animator _animator;
     [SerializeField] private AudioClip _hornClip;
@@ -61,6 +65,12 @@ public class Car : MonoBehaviour
         if (_isExploded) return;
         _isExploded = true;
 
+        // 屋根の上の寿司を非表示にする
+        if (_sushiOnRoof != null)
+        {
+            _sushiOnRoof.SetActive(false);
+        }
+
         // 爆発アニメーションの再生
         if (_animator != null)
         {
@@ -71,6 +81,17 @@ public class Car : MonoBehaviour
         if (_explosionPrefab != null)
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        // 寿司の召喚
+        if (_sushiPrefab != null)
+        {
+            GameObject spawnedSushi = Instantiate(_sushiPrefab, transform.position, Quaternion.identity);
+            Sushi sushiComponent = spawnedSushi.GetComponentInChildren<Sushi>();
+            if (sushiComponent != null)
+            {
+                sushiComponent.SetIdle();
+            }
         }
 
         // Rigidbodyを有効にして吹き飛ばす

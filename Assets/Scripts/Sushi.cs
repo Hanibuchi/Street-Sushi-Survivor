@@ -21,6 +21,17 @@ public class Sushi : MonoBehaviour
     /// </summary>
     public bool IsWasabi => _isWasabi;
 
+    /// <summary>
+    /// 寿司をアイドル状態にします。
+    /// </summary>
+    public void SetIdle()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Idle");
+        }
+    }
+
     private void Update()
     {
         if (_isProcessed) return;
