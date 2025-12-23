@@ -3,8 +3,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement Settings")]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float rotationSpeed = 720f;
+    
+    [Header("Animation Settings")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private string attackTriggerName = "Attack1";
+
+    [Header("References")]
     [SerializeField] private CharacterController controller;
 
     private InputAction moveAction;
@@ -13,8 +20,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        // "Move" と "Jump" のリファレンスを探す
-        // Input System 1.7以降のグローバルアクション参照を使用
+        // "Move" のリファレンスを探す
         if (InputSystem.actions == null)
         {
             Debug.LogError("InputSystem.actions is null. Please set 'Default Input Actions' in Project Settings > Input System Package.");
@@ -22,13 +28,16 @@ public class PlayerController : MonoBehaviour
         }
 
         moveAction = InputSystem.actions.FindAction("Move");
-
-        // アクションを有効化する
         moveAction?.Enable();
 
         if (controller == null)
         {
             controller = GetComponent<CharacterController>();
+        }
+
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
         }
     }
 
@@ -49,6 +58,9 @@ public class PlayerController : MonoBehaviour
         // CharacterController を使用した移動
         controller.Move(move * speed * Time.deltaTime);
 
+        // アニメーションの更新
+        UpdateAnimation(move);
+
         // なめらかな回転処理
         if (move != Vector3.zero)
         {
@@ -59,5 +71,48 @@ public class PlayerController : MonoBehaviour
         // 重力の適用
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void UpdateAnimation(Vector3 move)
+    {
+        bool isMoving = move.magnitude > 0.1f;
+        
+        // 移動している時は走る、止まっている時はIdle
+        SetRunning(isMoving);
+        SetIdle(!isMoving);
+        
+        // 歩きが必要な場合は条件に応じて SetWalking を呼ぶ
+    }
+
+    public void SetIdle(bool isIdle)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Idle", isIdle);
+        }
+    }
+
+    public void SetRunning(bool isRunning)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Run Forward", isRunning);
+        }
+    }
+
+    public void SetWalking(bool isWalking)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("WalkForward", isWalking);
+        }
+    }
+
+    public void TriggerAttack()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(attackTriggerName);
+        }
     }
 }
