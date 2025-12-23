@@ -6,11 +6,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private float rotationSpeed = 720f;
     [SerializeField] private CharacterController controller;
-    
+
     private InputAction moveAction;
-    private InputAction jumpAction;
     private Vector3 velocity;
-    private float gravity = -9.81f;
+    [SerializeField] float gravity = -9.81f;
 
     private void Start()
     {
@@ -23,11 +22,9 @@ public class PlayerController : MonoBehaviour
         }
 
         moveAction = InputSystem.actions.FindAction("Move");
-        jumpAction = InputSystem.actions.FindAction("Jump");
 
         // アクションを有効化する
         moveAction?.Enable();
-        jumpAction?.Enable();
 
         if (controller == null)
         {
@@ -57,13 +54,6 @@ public class PlayerController : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(move);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-
-        // ジャンプ処理
-        if (jumpAction != null && jumpAction.IsPressed() && controller.isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(2f * -2f * gravity); // 簡易的なジャンプ計算
-            Debug.Log("Jumping");
         }
 
         // 重力の適用
