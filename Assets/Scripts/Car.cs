@@ -35,13 +35,13 @@ public class Car : MonoBehaviour
 
     public void SetSpeed(float speed)
     {
-        Debug.Log($"Speed set to: {speed}");
+        // Debug.Log($"Speed set to: {speed}");
         _currentSpeed = speed;
     }
 
     public void ResetSpeed()
     {
-        Debug.Log($"Speed reset to: {_originalSpeed}");
+        // Debug.Log($"Speed reset to: {_originalSpeed}");
         _currentSpeed = _originalSpeed;
     }
 
@@ -192,7 +192,7 @@ public class Car : MonoBehaviour
     /// </summary>
     public void PlayHorn()
     {
-        Debug.Log($"SoundManager: {SoundManager.Instance != null}, HornClip: {_hornClip != null}");
+        // Debug.Log($"SoundManager: {SoundManager.Instance != null}, HornClip: {_hornClip != null}");
         if (SoundManager.Instance != null && _hornClip != null)
         {
             SoundManager.Instance.PlaySE(_hornClip);

@@ -26,7 +26,7 @@ public class Border : MonoBehaviour
         {
             // rootをDestroyする
             GameObject rootObject = obj.transform.root.gameObject;
-            Debug.Log($"Destroying object root: {rootObject.name}");
+            // Debug.Log($"Destroying object root: {rootObject.name}");
             Destroy(rootObject);
         }
     }

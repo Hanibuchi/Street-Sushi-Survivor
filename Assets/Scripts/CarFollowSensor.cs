@@ -11,7 +11,7 @@ public class CarFollowSensor : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (_car == null) return;
-        Debug.Log("CarFollowSensor: OnTriggerEnter detected");
+        // Debug.Log("CarFollowSensor: OnTriggerEnter detected");
 
         // 前方の車を検知
         Car otherCar = other.GetComponentInChildren<Car>();
@@ -37,7 +37,7 @@ public class CarFollowSensor : MonoBehaviour
     private void UpdateSpeed()
     {
         if (_car == null) return;
-        Debug.Log($"CarFollowSensor: Updating speed. Cars ahead count: {_carsAhead.Count}");
+        // Debug.Log($"CarFollowSensor: Updating speed. Cars ahead count: {_carsAhead.Count}");
 
         if (_carsAhead.Count > 0)
         {
