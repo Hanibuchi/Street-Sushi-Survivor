@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wasabiStunDuration = 2f;
     [SerializeField] private float jumpHeight = 1.5f;
 
+    [Header("Growth Settings")]
+    [SerializeField] private float baseScale = 1f;
+    [SerializeField] private float growthPerPoint = 0.01f;
+
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
     [SerializeField] private string attackTriggerName = "Attack1";
@@ -174,6 +178,26 @@ public class PlayerController : MonoBehaviour
         {
             animator = GetComponentInChildren<Animator>();
         }
+
+        if (GameSessionManager.Instance != null)
+        {
+            GameSessionManager.Instance.OnTotalPointsChanged += UpdateScale;
+            UpdateScale(GameSessionManager.Instance.TotalPoints);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameSessionManager.Instance != null)
+        {
+            GameSessionManager.Instance.OnTotalPointsChanged -= UpdateScale;
+        }
+    }
+
+    private void UpdateScale(int totalPoints)
+    {
+        float newScale = baseScale + (totalPoints * growthPerPoint);
+        SetRootScale(newScale);
     }
 
     private void Update()

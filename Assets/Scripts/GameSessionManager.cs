@@ -46,6 +46,7 @@ public class GameSessionManager : MonoBehaviour
     public event Action OnGameOver;
     public event Action<float> OnTimeChanged;
     public event Action<int, int> OnSushiCountChanged;
+    public event Action<int> OnTotalPointsChanged;
     public event Action<int> OnDayChanged;
     public event Action<int> OnRoundChanged;
     public event Action<TimeOfDay> OnTimeOfDayChanged;
@@ -82,6 +83,7 @@ public class GameSessionManager : MonoBehaviour
         OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
         OnRoundChanged?.Invoke(_currentRound);
         OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
+        OnTotalPointsChanged?.Invoke(_totalPoints);
 
         StartRound();
     }
@@ -122,6 +124,7 @@ public class GameSessionManager : MonoBehaviour
         _totalPoints += points;
         _sushiEatenInRound += points;
         OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
+        OnTotalPointsChanged?.Invoke(_totalPoints);
         Debug.Log($"Sushi Eaten: {points} points, Total: {_totalPoints}, Round: {_sushiEatenInRound}/{_targetSushi}");
 
         if (_sushiEatenInRound == _targetSushi - 1)
@@ -191,8 +194,7 @@ public class GameSessionManager : MonoBehaviour
     private void ApplyDayEndBonus()
     {
         Debug.Log($"Day {_currentDay - 1} Complete! Bonus Applied.");
-        // Add points or other permanent bonuses here
-        _totalPoints += 100 * (_currentDay - 1);
+        // Add other permanent bonuses here if needed
     }
 
     private void ShowBonusSelection()
