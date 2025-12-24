@@ -24,6 +24,11 @@ public class PlayerController : MonoBehaviour
         shockwaveSizeMultiplier = multiplier;
     }
 
+    public void SetRootScale(float scale)
+    {
+        transform.root.localScale = new Vector3(scale, scale, scale);
+    }
+
     [Header("Collision Settings")]
     [SerializeField] private LayerMask obstacleLayers;
 
