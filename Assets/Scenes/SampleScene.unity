@@ -15345,9 +15345,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _initialRoundTime: 30
-  _initialTargetSushi: 5
-  _timeIncreasePerRound: 20
-  _targetIncreasePerRound: 5
+  _timeIncreasePerDayArray:
+  - 10
+  - 15
+  - 20
+  - 30
+  _targetSushiPerDayArray: 05000000080000000c000000
   _oneMoreUIPrefab: {fileID: 0}
   _gameOverUI: {fileID: 0}
   _bonusSelectionUI: {fileID: 0}

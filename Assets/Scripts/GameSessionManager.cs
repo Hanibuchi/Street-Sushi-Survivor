@@ -15,9 +15,8 @@ public class GameSessionManager : MonoBehaviour
 
     [Header("Session Settings")]
     [SerializeField] private float _initialRoundTime = 30f;
-    [SerializeField] private int _initialTargetSushi = 5;
-    [SerializeField] private float _timeIncreasePerRound = 20f;
-    [SerializeField] private int _targetIncreasePerRound = 5;
+    [SerializeField] private float[] _timeIncreasePerDayArray = new float[] { 10f, 15f, 20f };
+    [SerializeField] private int[] _targetSushiPerDayArray = new int[] { 5, 8, 12 };
 
     [Header("UI References")]
     [SerializeField] private GameObject _oneMoreUIPrefab;
@@ -74,7 +73,7 @@ public class GameSessionManager : MonoBehaviour
         _currentDay = 1;
         _currentTimeOfDay = TimeOfDay.Morning;
         _currentRound = 1;
-        _targetSushi = _initialTargetSushi;
+        UpdateTargetSushi();
         _remainingTime = _initialRoundTime;
         _isGameOver = false;
         _sushiEatenInRound = 0;
@@ -85,6 +84,15 @@ public class GameSessionManager : MonoBehaviour
         OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
 
         StartRound();
+    }
+
+    private void UpdateTargetSushi()
+    {
+        if (_targetSushiPerDayArray != null && _targetSushiPerDayArray.Length > 0)
+        {
+            int index = Mathf.Clamp(_currentDay - 1, 0, _targetSushiPerDayArray.Length - 1);
+            _targetSushi = _targetSushiPerDayArray[index];
+        }
     }
 
     private void StartRound()
@@ -163,9 +171,18 @@ public class GameSessionManager : MonoBehaviour
         _currentRound++;
         OnRoundChanged?.Invoke(_currentRound);
         
-        // Increase difficulty
-        _targetSushi += _targetIncreasePerRound;
-        _remainingTime += _initialRoundTime + (_currentRound * _timeIncreasePerRound);
+        // ターゲット寿司数を更新
+        UpdateTargetSushi();
+
+        // 日ごとの追加時間を配列から取得（配列外の場合は最後の要素を使用）
+        float timeIncrease = 0f;
+        if (_timeIncreasePerDayArray != null && _timeIncreasePerDayArray.Length > 0)
+        {
+            int index = Mathf.Clamp(_currentDay - 1, 0, _timeIncreasePerDayArray.Length - 1);
+            timeIncrease = _timeIncreasePerDayArray[index];
+        }
+        
+        _remainingTime += timeIncrease;
         OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
 
         ShowBonusSelection();
