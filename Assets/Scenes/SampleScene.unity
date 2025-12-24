@@ -9568,6 +9568,57 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: cbc86bb57f673ba45a8426789eb0fac0, type: 3}
   m_PrefabInstance: {fileID: 1220340546}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1220954210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1220954212}
+  - component: {fileID: 1220954211}
+  m_Layer: 0
+  m_Name: CarSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1220954211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220954210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f69b6fb5a229f0f41acf3f23013f375b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _normalCars:
+  - {fileID: 8876621282862123563, guid: b73529feaecd421478f1dc2841c175f5, type: 3}
+  - {fileID: 7127277081067144369, guid: fa4dcb0a71fb5b54c8d41f614e56ef27, type: 3}
+  - {fileID: 8770719181489395076, guid: a49acdeaff956dc42ab0de078314e03c, type: 3}
+  _rareCars:
+  - {fileID: 3305400639953866002, guid: 6bdb703004c11b748bf3e813aebe943f, type: 3}
+  _spawnPoint: {fileID: 1220954212}
+--- !u!4 &1220954212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220954210}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 52.22458, y: 0, z: -2.9349208}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236936181 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 4f32dfddb033d3e40b5841bc53cc1689, type: 3}
@@ -11038,10 +11089,6 @@ PrefabInstance:
     - target: {fileID: 1460990311260339323, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
-      propertyPath: dashCooldown
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8042536184764977847, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
       propertyPath: m_Name
@@ -15528,6 +15575,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 2509cc5763ca17f4598bf61fd585a93e, type: 3}
   m_PrefabInstance: {fileID: 1983351250}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1986884089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1986884091}
+  - component: {fileID: 1986884090}
+  m_Layer: 0
+  m_Name: CarSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1986884090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986884089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204d485ee621ddd458170c20aa5b6c61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rareCarProbability: 0.1
+  _fixedInterval: 2
+  _averageRandomInterval: 3
+--- !u!4 &1986884091
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986884089}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 61.34, y: 2.31, z: -3.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1988229378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17458,6 +17552,7 @@ SceneRoots:
   - {fileID: 1409561609}
   - {fileID: 2036456022}
   - {fileID: 1130574926}
+  - {fileID: 1986884091}
   - {fileID: 123585877}
   - {fileID: 5752204612262444320}
   - {fileID: 6650731984018243265}
@@ -17471,3 +17566,4 @@ SceneRoots:
   - {fileID: 477607147}
   - {fileID: 8979146974418249262}
   - {fileID: 1820981064}
+  - {fileID: 1220954212}
