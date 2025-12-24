@@ -4998,6 +4998,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 19.999998, y: 0.20000087, z: 19.999998}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &624999238 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
+  m_PrefabInstance: {fileID: 1398718078}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b434b428a934b4541a7cc423d45c9fcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &626943532
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10382,15 +10393,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Car, Assembly-CSharp
-        m_MethodName: TriggerHornAnimation
-        m_Mode: 1
+      - m_Target: {fileID: 624999238}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: SetRootScale
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 5
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -10918,9 +10929,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
-      propertyPath: shockwavePrefab
+      propertyPath: sushiEatClip
       value: 
-      objectReference: {fileID: 5150704323687687291, guid: baa5bc644f80b8a41bac575929dde15e, type: 3}
+      objectReference: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
+    - target: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
+      propertyPath: wasabiEatClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b9eff218e132a4e76be78840eca96fb2, type: 3}
     - target: {fileID: 8042536184764977847, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
       propertyPath: m_Name
       value: Bear

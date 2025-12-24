@@ -9,12 +9,13 @@ public class Sushi : MonoBehaviour
     [SerializeField] private GameObject _rootObject;
 
     private bool _isProcessed = false;
+    public bool IsEaten => _isProcessed;
     private float _timer = 0f;
 
     /// <summary>
     /// この寿司を食べた時に得られるポイント
     /// </summary>
-    public int Points => _points;
+    public int Points => _isProcessed ? 0 : _points;
 
     /// <summary>
     /// これがワサビ（障害物）かどうか

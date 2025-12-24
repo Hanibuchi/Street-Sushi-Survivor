@@ -29,12 +29,52 @@ public class PlayerController : MonoBehaviour
         transform.root.localScale = new Vector3(scale, scale, scale);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // 寿司との接触判定
+        Sushi sushi = other.GetComponentInChildren<Sushi>();
+        if (sushi != null)
+        {
+            if (sushi.IsEaten) return;
+
+            // ワサビレイヤーかどうかの判定
+            bool isWasabi = other.gameObject.layer == LayerMask.NameToLayer("Wasabi");
+
+            if (isWasabi)
+            {
+                PlaySE(wasabiEatClip);
+                sushi.Eat();
+                OnWasabiHit();
+                return;
+            }
+
+            int points = sushi.Points;
+
+            sushi.Eat();
+            PlaySE(sushiEatClip);
+
+            // 寿司集計用クラスに通知
+            if (SushiCounter.Instance != null)
+            {
+                SushiCounter.Instance.AddPoints(points);
+            }
+        }
+    }
+
+    private void OnWasabiHit()
+    {
+        Debug.Log("Player hit Wasabi! Implementation for stun or penalty goes here.");
+        // 例: InterruptAction(); でダッシュを止めるなど
+    }
+
     [Header("Collision Settings")]
     [SerializeField] private LayerMask obstacleLayers;
 
     [Header("Audio Settings")]
     [SerializeField] private AudioClip attackClip;
     [SerializeField] private AudioClip obstacleHitClip;
+    [SerializeField] private AudioClip sushiEatClip;
+    [SerializeField] private AudioClip wasabiEatClip;
 
     [Header("References")]
     [SerializeField] private CharacterController controller;
