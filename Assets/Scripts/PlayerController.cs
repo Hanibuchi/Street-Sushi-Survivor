@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [Header("Growth Settings")]
     [SerializeField] private float baseScale = 1f;
     [SerializeField] private float growthPerPoint = 0.01f;
+    public float CurrentScale => transform.root.localScale.x;
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
@@ -275,8 +276,12 @@ public class PlayerController : MonoBehaviour
     {
         if (jumpAction != null && jumpAction.WasPressedThisFrame() && controller.isGrounded && (!isAttacking || isDashing))
         {
+            // サイズに応じてジャンプ力を調整
+            float currentScale = transform.root.localScale.x;
+            float scaledJumpHeight = jumpHeight * currentScale;
+
             // ジャンプ速度の計算: v = sqrt(h * -2 * g)
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(scaledJumpHeight * -2f * gravity);
         }
     }
 
