@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private float rotationSpeed = 720f;
     [SerializeField] private float dashSpeed = 25f;
+    [SerializeField] private float dashCooldown = 10f;
     [SerializeField] private float wasabiStunDuration = 2f;
 
     [Header("Animation Settings")]
@@ -35,6 +36,11 @@ public class PlayerController : MonoBehaviour
     public void SetWasabiStunDuration(float duration)
     {
         wasabiStunDuration = duration;
+    }
+
+    public void SetDashCooldown(float cooldown)
+    {
+        dashCooldown = cooldown;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -109,6 +115,7 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool isStunned = false;
+    private float lastDashTime = -999f;
     private Coroutine attackCoroutine;
     private Coroutine stunCoroutine;
 
@@ -208,13 +215,22 @@ public class PlayerController : MonoBehaviour
     {
         if (attackAction != null && attackAction.WasPressedThisFrame() && !isAttacking)
         {
-            attackCoroutine = StartCoroutine(AttackSequence());
+            // クールダウンのチェック
+            if (Time.time >= lastDashTime + dashCooldown)
+            {
+                attackCoroutine = StartCoroutine(AttackSequence());
+            }
+            else
+            {
+                Debug.Log("Dash is on cooldown!");
+            }
         }
     }
 
     private IEnumerator AttackSequence()
     {
         isAttacking = true;
+        lastDashTime = Time.time; // ダッシュ（攻撃シーケンス）開始時間を記録
         TriggerAttack();
         PlaySE(attackClip);
 
