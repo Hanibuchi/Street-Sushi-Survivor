@@ -15,6 +15,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDashDelay = 0.3f;
     [SerializeField] private float attackDashDuration = 5f;
 
+    [Header("Attack Effects")]
+    [SerializeField] private GameObject shockwavePrefab;
+    [SerializeField] private Transform shockwaveSpawnPoint;
+    [SerializeField] private float shockwaveSizeMultiplier = 1f;
+    public void SetShockwaveSizeMultiplier(float multiplier)
+    {
+        shockwaveSizeMultiplier = multiplier;
+    }
+
     [Header("Collision Settings")]
     [SerializeField] private LayerMask obstacleLayers;
 
@@ -126,6 +135,7 @@ public class PlayerController : MonoBehaviour
 
         // 攻撃の振りかぶり待ち
         yield return new WaitForSeconds(attackDashDelay);
+        SpawnShockwave();
 
         // ダッシュ開始
         isDashing = true;
@@ -221,6 +231,22 @@ public class PlayerController : MonoBehaviour
         if (SoundManager.Instance != null && clip != null)
         {
             SoundManager.Instance.PlaySE(clip);
+        }
+    }
+
+    private void SpawnShockwave()
+    {
+        if (shockwavePrefab != null)
+        {
+            // スポーン地点が設定されていればその位置と向き、なければ自身の位置と向きを使用
+            Vector3 spawnPos = shockwaveSpawnPoint != null ? shockwaveSpawnPoint.position : transform.position;
+            Quaternion spawnRot = shockwaveSpawnPoint != null ? shockwaveSpawnPoint.rotation : transform.rotation;
+
+            GameObject shockwave = Instantiate(shockwavePrefab, spawnPos, spawnRot);
+
+            // ルートのサイズに倍率をかけてスケールを設定
+            Vector3 baseScale = transform.root.localScale;
+            shockwave.transform.localScale = baseScale * shockwaveSizeMultiplier;
         }
     }
 }

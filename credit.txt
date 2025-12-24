@@ -24,6 +24,10 @@ Standard Unity Asset Store EULA
 https://assetstore.unity.com/packages/vfx/particles/fire-explosions/cinematic-explosions-free-257086
 Standard Unity Asset Store EULA
 
+- Distortion Shockwaves VFX by Mirza Beig
+https://assetstore.unity.com/packages/vfx/particles/distortion-shockwaves-vfx-273644
+Standard Unity Asset Store EULA
+
 ## UI
 - Free Casual GUI by Sky Den Games
 https://assetstore.unity.com/packages/2d/gui/free-casual-gui-332804
