@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private float rotationSpeed = 720f;
     [SerializeField] private float dashSpeed = 25f;
+    [SerializeField] private float wasabiStunDuration = 2f;
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
@@ -27,6 +28,11 @@ public class PlayerController : MonoBehaviour
     public void SetRootScale(float scale)
     {
         transform.root.localScale = new Vector3(scale, scale, scale);
+    }
+
+    public void SetWasabiStunDuration(float duration)
+    {
+        wasabiStunDuration = duration;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,8 +69,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnWasabiHit()
     {
-        Debug.Log("Player hit Wasabi! Implementation for stun or penalty goes here.");
-        // 例: InterruptAction(); でダッシュを止めるなど
+        if (stunCoroutine != null)
+        {
+            StopCoroutine(stunCoroutine);
+        }
+        stunCoroutine = StartCoroutine(StunRoutine());
+    }
+
+    private IEnumerator StunRoutine()
+    {
+        isStunned = true;
+        InterruptAction(); // 攻撃やダッシュを中断
+
+        yield return new WaitForSeconds(wasabiStunDuration);
+
+        isStunned = false;
+        stunCoroutine = null;
     }
 
     [Header("Collision Settings")]
@@ -86,7 +106,9 @@ public class PlayerController : MonoBehaviour
 
     private bool isAttacking = false;
     private bool isDashing = false;
+    private bool isStunned = false;
     private Coroutine attackCoroutine;
+    private Coroutine stunCoroutine;
 
     private void Start()
     {
@@ -124,16 +146,27 @@ public class PlayerController : MonoBehaviour
             velocity.y = -2f;
         }
 
-        HandleAttackInput();
-
         Vector3 move = Vector3.zero;
-        float currentSpeed = isDashing ? dashSpeed : speed;
 
-        // 攻撃の振りかぶり中（isAttacking かつ !isDashing）以外は操作可能
-        if (moveAction != null && (!isAttacking || isDashing))
+        if (!isStunned)
         {
-            Vector2 moveInput = moveAction.ReadValue<Vector2>();
-            move = new Vector3(moveInput.x, 0f, moveInput.y) * currentSpeed;
+            HandleAttackInput();
+
+            float currentSpeed = isDashing ? dashSpeed : speed;
+
+            // 攻撃の振りかぶり中（isAttacking かつ !isDashing）以外は操作可能
+            if (moveAction != null && (!isAttacking || isDashing))
+            {
+                Vector2 moveInput = moveAction.ReadValue<Vector2>();
+                move = new Vector3(moveInput.x, 0f, moveInput.y) * currentSpeed;
+            }
+
+            // なめらかな回転処理
+            if (move != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(move);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
         }
 
         // CharacterController を使用した移動
@@ -141,13 +174,6 @@ public class PlayerController : MonoBehaviour
 
         // アニメーションの更新
         UpdateAnimation(move);
-
-        // なめらかな回転処理
-        if (move != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(move);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
 
         // 重力の適用
         velocity.y += gravity * Time.deltaTime;
@@ -215,6 +241,16 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimation(Vector3 move)
     {
+        if (isStunned)
+        {
+            SetStunned(true);
+            SetIdle(false);
+            SetRunning(false);
+            SetWalking(false);
+            return;
+        }
+
+        SetStunned(false);
         bool isMoving = move.magnitude > 0.1f;
 
         if (isMoving)
@@ -260,6 +296,14 @@ public class PlayerController : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("WalkForward", isWalking);
+        }
+    }
+
+    public void SetStunned(bool isStunned)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Stunned Loop", isStunned);
         }
     }
 
