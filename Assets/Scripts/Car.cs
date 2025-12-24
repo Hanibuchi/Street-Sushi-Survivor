@@ -4,7 +4,7 @@ public class Car : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float _moveSpeed = 5f;
-    [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private LayerMask _collisionLayer;
 
     [Header("Explosion Settings")]
     [SerializeField] private GameObject _explosionPrefab;
@@ -22,6 +22,28 @@ public class Car : MonoBehaviour
     [SerializeField] private AudioClip _hornClip;
 
     private bool _isExploded = false;
+    private float _currentSpeed;
+    private float _originalSpeed;
+
+    public float CurrentSpeed => _currentSpeed;
+
+    private void Start()
+    {
+        _originalSpeed = _moveSpeed;
+        _currentSpeed = _moveSpeed;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        Debug.Log($"Speed set to: {speed}");
+        _currentSpeed = speed;
+    }
+
+    public void ResetSpeed()
+    {
+        Debug.Log($"Speed reset to: {_originalSpeed}");
+        _currentSpeed = _originalSpeed;
+    }
 
     private void FixedUpdate()
     {
@@ -30,7 +52,7 @@ public class Car : MonoBehaviour
         // Rigidbodyを使用して前進し続ける
         if (_carRigidbody != null)
         {
-            Vector3 nextPosition = _carRigidbody.position + transform.forward * _moveSpeed * Time.fixedDeltaTime;
+            Vector3 nextPosition = _carRigidbody.position + transform.forward * _currentSpeed * Time.fixedDeltaTime;
             _carRigidbody.MovePosition(nextPosition);
         }
     }
@@ -50,7 +72,7 @@ public class Car : MonoBehaviour
     void HandleCollision(GameObject obj, Vector3 pos)
     {
         // 指定したLayer以外のオブジェクトと衝突したら爆発
-        if (((1 << obj.layer) & _groundLayer) == 0)
+        if (((1 << obj.layer) & _collisionLayer) != 0)
         {
             Explode();
         }
