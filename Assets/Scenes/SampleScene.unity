@@ -10928,14 +10928,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
-      propertyPath: sushiEatClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
-    - target: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
-      propertyPath: wasabiEatClip
-      value: 
-      objectReference: {fileID: 8300000, guid: b9eff218e132a4e76be78840eca96fb2, type: 3}
     - target: {fileID: 8042536184764977847, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
       propertyPath: m_Name
       value: Bear

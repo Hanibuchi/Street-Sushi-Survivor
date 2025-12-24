@@ -24,8 +24,8 @@ Standard Unity Asset Store EULA
 https://assetstore.unity.com/packages/vfx/particles/fire-explosions/cinematic-explosions-free-257086
 Standard Unity Asset Store EULA
 
-- Distortion Shockwaves VFX by Mirza Beig
-https://assetstore.unity.com/packages/vfx/particles/distortion-shockwaves-vfx-273644
+- Easy Shockwaves VFX - URP by Vefects
+https://assetstore.unity.com/packages/vfx/easy-shockwaves-vfx-urp-306143#reviews
 Standard Unity Asset Store EULA
 
 ## UI
