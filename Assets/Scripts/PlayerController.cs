@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance { get; private set; }
+
     [Header("Movement Settings")]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float rotationSpeed = 720f;
@@ -109,6 +111,18 @@ public class PlayerController : MonoBehaviour
     private bool isStunned = false;
     private Coroutine attackCoroutine;
     private Coroutine stunCoroutine;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
