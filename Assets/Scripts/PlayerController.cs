@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDashDelay = 0.3f;
     [SerializeField] private float attackDashDuration = 5f;
 
+    [Header("Collision Settings")]
+    [SerializeField] private LayerMask obstacleLayers;
+
     [Header("References")]
     [SerializeField] private CharacterController controller;
 
@@ -91,6 +94,15 @@ public class PlayerController : MonoBehaviour
         // 重力の適用
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // ダッシュ中に指定したレイヤーのオブジェクトにぶつかったらリセット
+        if (isDashing && (obstacleLayers.value & (1 << hit.gameObject.layer)) != 0)
+        {
+            InterruptAction();
+        }
     }
 
     private void HandleAttackInput()
