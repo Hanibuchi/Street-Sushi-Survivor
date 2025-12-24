@@ -38,9 +38,19 @@ public class Car : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         if (_isExploded) return;
+        HandleCollision(collision.gameObject, collision.contacts[0].point);
+    }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (_isExploded) return;
+        HandleCollision(other.gameObject, transform.position);
+    }
+
+    void HandleCollision(GameObject obj, Vector3 pos)
+    {
         // 指定したLayer以外のオブジェクトと衝突したら爆発
-        if (((1 << collision.gameObject.layer) & _groundLayer) == 0)
+        if (((1 << obj.layer) & _groundLayer) == 0)
         {
             Explode();
         }
