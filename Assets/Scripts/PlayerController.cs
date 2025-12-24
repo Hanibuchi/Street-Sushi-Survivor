@@ -115,9 +115,16 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool isStunned = false;
-    private float lastDashTime = -999f;
+    private float lastDashStartTime = -999f;
+    private float lastDashEndTime = -999f;
     private Coroutine attackCoroutine;
     private Coroutine stunCoroutine;
+
+    public bool IsDashing => isDashing;
+    public float DashDuration => attackDashDuration;
+    public float DashCooldown => dashCooldown;
+    public float LastDashStartTime => lastDashStartTime;
+    public float LastDashEndTime => lastDashEndTime;
 
     private void Awake()
     {
@@ -215,8 +222,8 @@ public class PlayerController : MonoBehaviour
     {
         if (attackAction != null && attackAction.WasPressedThisFrame() && !isAttacking)
         {
-            // クールダウンのチェック
-            if (Time.time >= lastDashTime + dashCooldown)
+            // クールダウンのチェック（ダッシュ終了時間から計測）
+            if (Time.time >= lastDashEndTime + dashCooldown)
             {
                 attackCoroutine = StartCoroutine(AttackSequence());
             }
@@ -230,7 +237,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator AttackSequence()
     {
         isAttacking = true;
-        lastDashTime = Time.time; // ダッシュ（攻撃シーケンス）開始時間を記録
+        lastDashStartTime = Time.time; // ダッシュ（攻撃シーケンス）開始時間を記録
         TriggerAttack();
         PlaySE(attackClip);
 
@@ -266,6 +273,7 @@ public class PlayerController : MonoBehaviour
         }
         isAttacking = false;
         isDashing = false;
+        lastDashEndTime = Time.time; // ダッシュ終了時間を記録
         // 次のUpdateで通常のUpdateAnimationが呼ばれ、状態が復元されます
     }
 
