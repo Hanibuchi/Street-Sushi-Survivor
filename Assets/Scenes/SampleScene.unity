@@ -16229,6 +16229,7 @@ MonoBehaviour:
   _rareCarProbability: 0.1
   _fixedInterval: 2
   _averageRandomInterval: 10
+  _explosionDistanceThreshold: 30
 --- !u!4 &1986884091
 Transform:
   m_ObjectHideFlags: 0

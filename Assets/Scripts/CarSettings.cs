@@ -14,9 +14,14 @@ public class CarSettings : MonoBehaviour
     [Tooltip("ポアソン分布に使用する平均変動間隔（秒）")]
     [SerializeField] private float _averageRandomInterval = 3f;
 
+    [Header("Explosion Settings")]
+    [Tooltip("プレイヤーからこの距離以上離れている場合は爆発演出をスキップして即座に破棄する")]
+    [SerializeField] private float _explosionDistanceThreshold = 50f;
+
     public float RareCarProbability => _rareCarProbability;
     public float FixedInterval => _fixedInterval;
     public float AverageRandomInterval => _averageRandomInterval;
+    public float ExplosionDistanceThreshold => _explosionDistanceThreshold;
 
     private void Awake()
     {

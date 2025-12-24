@@ -97,6 +97,18 @@ public class Car : MonoBehaviour
         if (_isExploded) return;
         _isExploded = true;
 
+        // プレイヤーから遠い場合は演出なしで即座に破棄
+        if (PlayerController.Instance != null && CarSettings.Instance != null)
+        {
+            float distance = Vector3.Distance(transform.position, PlayerController.Instance.transform.position);
+            if (distance > CarSettings.Instance.ExplosionDistanceThreshold)
+            {
+                if (_rootObject != null) Destroy(_rootObject);
+                else Destroy(gameObject);
+                return;
+            }
+        }
+
         // 屋根の上の寿司を非表示にする
         if (_sushiOnRoof != null)
         {
