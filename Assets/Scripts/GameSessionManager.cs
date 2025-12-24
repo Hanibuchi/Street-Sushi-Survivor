@@ -173,7 +173,7 @@ public class GameSessionManager : MonoBehaviour
 
         _currentRound++;
         OnRoundChanged?.Invoke(_currentRound);
-        
+
         // ターゲット寿司数を更新
         UpdateTargetSushi();
 
@@ -184,17 +184,18 @@ public class GameSessionManager : MonoBehaviour
             int index = Mathf.Clamp(_currentDay - 1, 0, _timeIncreasePerDayArray.Length - 1);
             timeIncrease = _timeIncreasePerDayArray[index];
         }
-        
+
         _remainingTime += timeIncrease;
         OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
 
-        ShowBonusSelection();
+        // If no UI, just start next round
+        StartRound();
     }
 
     private void ApplyDayEndBonus()
     {
+        ShowBonusSelection();
         Debug.Log($"Day {_currentDay - 1} Complete! Bonus Applied.");
-        // Add other permanent bonuses here if needed
     }
 
     private void ShowBonusSelection()
@@ -203,11 +204,6 @@ public class GameSessionManager : MonoBehaviour
         {
             _bonusSelectionUI.SetActive(true);
             Time.timeScale = 0f; // Pause for selection
-        }
-        else
-        {
-            // If no UI, just start next round
-            StartRound();
         }
     }
 
