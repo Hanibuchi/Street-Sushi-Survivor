@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
     [Header("Collision Settings")]
     [SerializeField] private LayerMask obstacleLayers;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip attackClip;
+    [SerializeField] private AudioClip obstacleHitClip;
+
     [Header("References")]
     [SerializeField] private CharacterController controller;
 
@@ -101,6 +105,7 @@ public class PlayerController : MonoBehaviour
         // ダッシュ中に指定したレイヤーのオブジェクトにぶつかったらリセット
         if (isDashing && (obstacleLayers.value & (1 << hit.gameObject.layer)) != 0)
         {
+            PlaySE(obstacleHitClip);
             InterruptAction();
         }
     }
@@ -117,6 +122,7 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = true;
         TriggerAttack();
+        PlaySE(attackClip);
 
         // 攻撃の振りかぶり待ち
         yield return new WaitForSeconds(attackDashDelay);
@@ -207,6 +213,14 @@ public class PlayerController : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger(attackTriggerName);
+        }
+    }
+
+    private void PlaySE(AudioClip clip)
+    {
+        if (SoundManager.Instance != null && clip != null)
+        {
+            SoundManager.Instance.PlaySE(clip);
         }
     }
 }
