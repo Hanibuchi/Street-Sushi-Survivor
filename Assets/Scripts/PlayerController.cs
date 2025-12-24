@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed = 25f;
     [SerializeField] private float dashCooldown = 10f;
     [SerializeField] private float wasabiStunDuration = 2f;
+    [SerializeField] private float jumpHeight = 1.5f;
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
@@ -109,6 +110,7 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction attackAction;
+    private InputAction jumpAction;
     private Vector3 velocity;
     [SerializeField] float gravity = -9.81f;
 
@@ -149,9 +151,11 @@ public class PlayerController : MonoBehaviour
 
         moveAction = InputSystem.actions.FindAction("Move");
         attackAction = InputSystem.actions.FindAction("Attack");
+        jumpAction = InputSystem.actions.FindAction("Jump");
 
         moveAction?.Enable();
         attackAction?.Enable();
+        jumpAction?.Enable();
 
         if (controller == null)
         {
@@ -179,6 +183,7 @@ public class PlayerController : MonoBehaviour
         if (!isStunned)
         {
             HandleAttackInput();
+            HandleJumpInput();
 
             float currentSpeed = isDashing ? dashSpeed : speed;
 
@@ -231,6 +236,15 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Dash is on cooldown!");
             }
+        }
+    }
+
+    private void HandleJumpInput()
+    {
+        if (jumpAction != null && jumpAction.WasPressedThisFrame() && controller.isGrounded && (!isAttacking || isDashing))
+        {
+            // ジャンプ速度の計算: v = sqrt(h * -2 * g)
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
