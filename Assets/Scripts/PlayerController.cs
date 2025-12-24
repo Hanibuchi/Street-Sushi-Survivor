@@ -74,11 +74,12 @@ public class PlayerController : MonoBehaviour
 
             sushi.Eat();
             PlaySE(sushiEatClip);
+            // Debug.Log($"Sushi Eaten: {points} points");
 
-            // 寿司集計用クラスに通知
-            if (SushiCounter.Instance != null)
+            // ゲームセッション管理クラスに通知
+            if (GameSessionManager.Instance != null)
             {
-                SushiCounter.Instance.AddPoints(points);
+                GameSessionManager.Instance.OnSushiEaten(points);
             }
         }
     }
