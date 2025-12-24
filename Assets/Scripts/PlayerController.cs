@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Settings")]
     [SerializeField] private float speed = 10f;
+    public float Speed => speed;
     [SerializeField] private float rotationSpeed = 720f;
     [SerializeField] private float dashSpeed = 25f;
     [SerializeField] private float dashCooldown = 10f;
@@ -24,9 +25,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject shockwavePrefab;
     [SerializeField] private Transform shockwaveSpawnPoint;
     [SerializeField] private float shockwaveSizeMultiplier = 1f;
+    public float ShockwaveSizeMultiplier => shockwaveSizeMultiplier;
     public void SetShockwaveSizeMultiplier(float multiplier)
     {
         shockwaveSizeMultiplier = multiplier;
+    }
+
+    public void SetSpeed(float value)
+    {
+        speed = value;
     }
 
     public void SetRootScale(float scale)
