@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,21 +7,29 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float rotationSpeed = 720f;
-    
+    [SerializeField] private float dashSpeed = 25f;
+
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
     [SerializeField] private string attackTriggerName = "Attack1";
+    [SerializeField] private float attackDashDelay = 0.3f;
+    [SerializeField] private float attackDashDuration = 5f;
 
     [Header("References")]
     [SerializeField] private CharacterController controller;
 
     private InputAction moveAction;
+    private InputAction attackAction;
     private Vector3 velocity;
     [SerializeField] float gravity = -9.81f;
 
+    private bool isAttacking = false;
+    private bool isDashing = false;
+    private Coroutine attackCoroutine;
+
     private void Start()
     {
-        // "Move" のリファレンスを探す
+        // "Move" と "Attack" のリファレンスを探す
         if (InputSystem.actions == null)
         {
             Debug.LogError("InputSystem.actions is null. Please set 'Default Input Actions' in Project Settings > Input System Package.");
@@ -28,7 +37,10 @@ public class PlayerController : MonoBehaviour
         }
 
         moveAction = InputSystem.actions.FindAction("Move");
+        attackAction = InputSystem.actions.FindAction("Attack");
+
         moveAction?.Enable();
+        attackAction?.Enable();
 
         if (controller == null)
         {
@@ -43,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (moveAction == null || controller == null) return;
+        if (controller == null) return;
 
         // 地面接地判定と重力の初期化
         if (controller.isGrounded && velocity.y < 0)
@@ -51,12 +63,20 @@ public class PlayerController : MonoBehaviour
             velocity.y = -2f;
         }
 
-        // 移動入力の取得
-        Vector2 moveInput = moveAction.ReadValue<Vector2>();
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
+        HandleAttackInput();
+
+        Vector3 move = Vector3.zero;
+        float currentSpeed = isDashing ? dashSpeed : speed;
+
+        // 攻撃の振りかぶり中（isAttacking かつ !isDashing）以外は操作可能
+        if (moveAction != null && (!isAttacking || isDashing))
+        {
+            Vector2 moveInput = moveAction.ReadValue<Vector2>();
+            move = new Vector3(moveInput.x, 0f, moveInput.y) * currentSpeed;
+        }
 
         // CharacterController を使用した移動
-        controller.Move(move * speed * Time.deltaTime);
+        controller.Move(move * Time.deltaTime);
 
         // アニメーションの更新
         UpdateAnimation(move);
@@ -73,15 +93,77 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
+    private void HandleAttackInput()
+    {
+        if (attackAction != null && attackAction.WasPressedThisFrame() && !isAttacking)
+        {
+            attackCoroutine = StartCoroutine(AttackSequence());
+        }
+    }
+
+    private IEnumerator AttackSequence()
+    {
+        isAttacking = true;
+        TriggerAttack();
+
+        // 攻撃の振りかぶり待ち
+        yield return new WaitForSeconds(attackDashDelay);
+
+        // ダッシュ開始
+        isDashing = true;
+
+        yield return new WaitForSeconds(attackDashDuration);
+
+        ResetAttackState();
+    }
+
+    /// <summary>
+    /// 障害物にぶつかった時などに外部から呼び出すことで、攻撃・ダッシュ状態を強制リセットします。
+    /// </summary>
+    public void InterruptAction()
+    {
+        if (isAttacking || isDashing)
+        {
+            ResetAttackState();
+        }
+    }
+
+    private void ResetAttackState()
+    {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+        isAttacking = false;
+        isDashing = false;
+        // 次のUpdateで通常のUpdateAnimationが呼ばれ、状態が復元されます
+    }
+
     private void UpdateAnimation(Vector3 move)
     {
         bool isMoving = move.magnitude > 0.1f;
-        
-        // 移動している時は走る、止まっている時はIdle
-        SetRunning(isMoving);
-        SetIdle(!isMoving);
-        
-        // 歩きが必要な場合は条件に応じて SetWalking を呼ぶ
+
+        if (isMoving)
+        {
+            SetIdle(false);
+            if (isDashing)
+            {
+                SetRunning(true);
+                SetWalking(false);
+            }
+            else
+            {
+                SetRunning(false);
+                SetWalking(true);
+            }
+        }
+        else
+        {
+            SetIdle(true);
+            SetRunning(false);
+            SetWalking(false);
+        }
     }
 
     public void SetIdle(bool isIdle)
