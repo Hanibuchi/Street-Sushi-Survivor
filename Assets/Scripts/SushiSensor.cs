@@ -6,7 +6,7 @@ public class SushiSensor : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float _attractionSpeed = 5f;
     [SerializeField] private LayerMask _sushiLayer;
-    
+
     private List<Sushi> _trackedSushi = new List<Sushi>();
 
     /// <summary>
@@ -26,7 +26,7 @@ public class SushiSensor : MonoBehaviour
             Sushi sushi = other.GetComponentInParent<Sushi>();
             if (sushi == null) sushi = other.GetComponentInChildren<Sushi>();
 
-            if (sushi != null && !sushi.IsWasabi && !sushi.IsEaten)
+            if (sushi != null && !sushi.IsEaten)
             {
                 if (!_trackedSushi.Contains(sushi))
                 {
