@@ -30,6 +30,10 @@ public class GameSessionUI : MonoBehaviour
     [Header("Day Transition UI")]
     [SerializeField] private DayTransitionUI _dayTransitionUI;
 
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip _timeChangeSE;
+    [SerializeField] private AudioClip _dayChangeSE;
+
     private float _lastLogTime = 0f;
     private TimeOfDay _lastTimeOfDay;
     private bool _isDayChanging = false;
@@ -134,6 +138,12 @@ public class GameSessionUI : MonoBehaviour
             _dayTransitionUI.gameObject.SetActive(true);
             _dayTransitionUI.Setup(day);
             _isDayChanging = true;
+
+            // 日替わりSEを再生
+            if (SoundManager.Instance != null && _dayChangeSE != null)
+            {
+                SoundManager.Instance.PlaySE(_dayChangeSE);
+            }
         }
     }
 
@@ -159,6 +169,12 @@ public class GameSessionUI : MonoBehaviour
         {
             _timeTransitionUI.gameObject.SetActive(true);
             _timeTransitionUI.Setup(prevStr, nextStr);
+
+            // 時間帯変更SEを再生
+            if (SoundManager.Instance != null && _timeChangeSE != null)
+            {
+                SoundManager.Instance.PlaySE(_timeChangeSE);
+            }
         }
 
         _lastTimeOfDay = timeOfDay;
