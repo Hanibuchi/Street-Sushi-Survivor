@@ -13,6 +13,10 @@ public class GameSessionUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _roundText;
     [SerializeField] private TextMeshProUGUI _timeOfDayText;
 
+    [Header("OneMore UI")]
+    [SerializeField] private GameObject _oneMoreUIPrefab;
+    [SerializeField] private RectTransform _uiSpawnParent;
+
     private float _lastLogTime = 0f;
 
     private void Start()
@@ -70,6 +74,14 @@ public class GameSessionUI : MonoBehaviour
         {
             _sushiSlider.maxValue = target;
             _sushiSlider.value = current;
+        }
+
+        if (current == target - 1)
+        {
+            if (_oneMoreUIPrefab != null && _uiSpawnParent != null)
+            {
+                Instantiate(_oneMoreUIPrefab, _uiSpawnParent);
+            }
         }
     }
 

@@ -19,7 +19,6 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private int[] _targetSushiPerDayArray = new int[] { 5, 8, 12 };
 
     [Header("UI References")]
-    [SerializeField] private GameObject _oneMoreUIPrefab;
     [SerializeField] private GameObject _gameOverUI;
     [SerializeField] private GameObject _bonusSelectionUI;
 
@@ -127,10 +126,6 @@ public class GameSessionManager : MonoBehaviour
         OnTotalPointsChanged?.Invoke(_totalPoints);
         Debug.Log($"Sushi Eaten: {points} points, Total: {_totalPoints}, Round: {_sushiEatenInRound}/{_targetSushi}");
 
-        if (_sushiEatenInRound == _targetSushi - 1)
-        {
-            ShowOneMoreUI();
-        }
 
         if (_sushiEatenInRound >= _targetSushi)
         {
@@ -141,17 +136,6 @@ public class GameSessionManager : MonoBehaviour
     public void AddTime(float seconds)
     {
         _remainingTime += seconds;
-    }
-
-    private void ShowOneMoreUI()
-    {
-        if (_oneMoreUIPrefab != null)
-        {
-            // Instantiate or enable "One More!" UI
-            GameObject ui = Instantiate(_oneMoreUIPrefab);
-            Destroy(ui, 2f);
-        }
-        Debug.Log("もうひとつ！ (One More!)");
     }
 
     private void CompleteRound()
