@@ -16,6 +16,7 @@ public class BonusUI : MonoBehaviour
     }
 
     [SerializeField] private BonusUIElements[] _bonusOptions = new BonusUIElements[3];
+    [SerializeField] private Animator _animator;
 
     private Action _onComplete;
     private List<BonusData> _currentOptions;
@@ -37,6 +38,13 @@ public class BonusUI : MonoBehaviour
         _currentOptions = BonusManager.Instance.GetRandomBonuses(3);
         gameObject.SetActive(true);
         Time.timeScale = 0f;
+
+        if (_animator == null) TryGetComponent<Animator>(out _animator);
+        if (_animator != null)
+        {
+            _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            _animator.SetTrigger("Show");
+        }
 
         for (int i = 0; i < _bonusOptions.Length; i++)
         {
@@ -75,9 +83,20 @@ public class BonusUI : MonoBehaviour
             }
         }
 
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Hide");
+        }
+        else
+        {
+            OnHideAnimationComplete();
+        }
+    }
+
+    public void OnHideAnimationComplete()
+    {
         // UIを閉じてコールバックを実行
         gameObject.SetActive(false);
-        Time.timeScale = 1f;
         _onComplete?.Invoke();
     }
 }

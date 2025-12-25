@@ -14,7 +14,7 @@ public class BonusManager : MonoBehaviour
 {
     public static BonusManager Instance { get; private set; }
 
-    [SerializeField] private List<BonusData> _allBonuses;
+    [SerializeField] private BonusDataList _bonusDataList;
 
     private void Awake()
     {
@@ -31,7 +31,9 @@ public class BonusManager : MonoBehaviour
     public List<BonusData> GetRandomBonuses(int count)
     {
         List<BonusData> result = new List<BonusData>();
-        List<BonusData> pool = new List<BonusData>(_allBonuses);
+        if (_bonusDataList == null || _bonusDataList.bonuses == null) return result;
+
+        List<BonusData> pool = new List<BonusData>(_bonusDataList.bonuses);
 
         for (int i = 0; i < count && pool.Count > 0; i++)
         {

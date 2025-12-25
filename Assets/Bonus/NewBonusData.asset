@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db180a4481e2bb439752b67efda5bd0, type: 3}
   m_Name: NewBonusData
   m_EditorClassIdentifier: 
-  bonusName: 
-  description: 
+  bonusName: "\u3066\uFF53\u3064\u3068"
+  description: "\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A"
   type: 0
-  value: 0
