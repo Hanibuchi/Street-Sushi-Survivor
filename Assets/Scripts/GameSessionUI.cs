@@ -24,7 +24,11 @@ public class GameSessionUI : MonoBehaviour
     [SerializeField] private GameObject _oneMoreUIPrefab;
     [SerializeField] private RectTransform _uiSpawnParent;
 
+    [Header("Time Transition UI")]
+    [SerializeField] private TimeTransitionUI _timeTransitionUI;
+
     private float _lastLogTime = 0f;
+    private TimeOfDay _lastTimeOfDay;
 
     private void Start()
     {
@@ -41,7 +45,9 @@ public class GameSessionUI : MonoBehaviour
             UpdateSushiUI(GameSessionManager.Instance.SushiEatenInRound, GameSessionManager.Instance.TargetSushi);
             UpdateDayUI(GameSessionManager.Instance.CurrentDay);
             UpdateRoundUI(GameSessionManager.Instance.CurrentRound);
-            UpdateTimeOfDayUI(GameSessionManager.Instance.CurrentTimeOfDay);
+            
+            _lastTimeOfDay = GameSessionManager.Instance.CurrentTimeOfDay;
+            UpdateTimeOfDayUI(_lastTimeOfDay);
         }
     }
 
@@ -129,15 +135,30 @@ public class GameSessionUI : MonoBehaviour
     {
         if (_timeOfDayText == null) return;
 
-        string timeStr = timeOfDay switch
+        string prevStr = GetTimeOfDayJapanese(_lastTimeOfDay);
+        string nextStr = GetTimeOfDayJapanese(timeOfDay);
+
+        _timeOfDayText.text = nextStr;
+        if (_timeOfDayAnimator != null) _timeOfDayAnimator.SetTrigger("Update");
+
+        // 時間帯が変わった時に演出用UIを表示
+        if (timeOfDay != _lastTimeOfDay && _timeTransitionUI != null)
+        {
+            _timeTransitionUI.gameObject.SetActive(true);
+            _timeTransitionUI.Setup(prevStr, nextStr);
+        }
+
+        _lastTimeOfDay = timeOfDay;
+    }
+
+    private string GetTimeOfDayJapanese(TimeOfDay timeOfDay)
+    {
+        return timeOfDay switch
         {
             TimeOfDay.Morning => "朝",
             TimeOfDay.Afternoon => "昼",
-            TimeOfDay.Evening => "夜",
+            TimeOfDay.Evening => "夕",
             _ => timeOfDay.ToString()
         };
-
-        _timeOfDayText.text = timeStr;
-        if (_timeOfDayAnimator != null) _timeOfDayAnimator.SetTrigger("Update");
     }
 }
