@@ -18,6 +18,7 @@ public class GameSessionUI : MonoBehaviour
     [SerializeField] private Animator _timeOfDayAnimator;
     [SerializeField] private Animator _targetSushiAnimator;
     [SerializeField] private Animator _sushiCountAnimator;
+    [SerializeField] private Animator _timeAnimator;
 
     [Header("OneMore UI")]
     [SerializeField] private GameObject _oneMoreUIPrefab;
@@ -60,6 +61,16 @@ public class GameSessionUI : MonoBehaviour
     {
         if (_timeText != null)
             _timeText.text = $"{remainingTime:F1}";
+
+        // 10秒以下の時、1秒ごとにアニメーションを再生
+        if (remainingTime <= 10f && remainingTime >= 0)
+        {
+            // 小数点以下を切り捨てた値が変わったタイミング（＝1秒経過）で実行
+            if (Mathf.FloorToInt(remainingTime) != Mathf.FloorToInt(remainingTime + Time.deltaTime))
+            {
+                if (_timeAnimator != null) _timeAnimator.SetTrigger("Update");
+            }
+        }
 
         // 1秒ごとにログ出力
         if (Time.time - _lastLogTime >= 1f)
