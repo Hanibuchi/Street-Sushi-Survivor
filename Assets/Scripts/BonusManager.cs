@@ -10,14 +10,6 @@ public enum BonusType
     SushiPoints
 }
 
-[System.Serializable]
-public class BonusOption
-{
-    public BonusType type;
-    public string description;
-    public float value;
-}
-
 public class BonusManager : MonoBehaviour
 {
     public static BonusManager Instance { get; private set; }
@@ -49,6 +41,25 @@ public class BonusManager : MonoBehaviour
         }
 
         return result;
+    }
+
+    public string GetDynamicDescription(BonusType type)
+    {
+        switch (type)
+        {
+            case BonusType.MoveSpeed:
+                return "Increases your movement speed.";
+            case BonusType.DashCooldown:
+                return "Reduces the cooldown time of your dash.";
+            case BonusType.ShockwaveSize:
+                return "Increases the size of your shockwave attack.";
+            case BonusType.TimeExtension:
+                return "Extends the time limit for the current round.";
+            case BonusType.SushiPoints:
+                return "Increases the points gained from eating sushi.";
+            default:
+                return "";
+        }
     }
 
     public void ApplyBonus(BonusData bonus)
