@@ -17,6 +17,7 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private float _initialRoundTime = 30f;
     [SerializeField] private float[] _timeIncreasePerDayArray = new float[] { 10f, 15f, 20f };
     [SerializeField] private int[] _targetSushiPerDayArray = new int[] { 5, 8, 12 };
+    [SerializeField] private float _transitionPauseDuration = 2.0f;
 
     [Header("UI References")]
     [SerializeField] private GameObject _gameOverUI;
@@ -140,9 +141,15 @@ public class GameSessionManager : MonoBehaviour
 
     private void CompleteRound()
     {
+        StartCoroutine(CompleteRoundRoutine());
+    }
+
+    private IEnumerator CompleteRoundRoutine()
+    {
         _isPaused = true;
         OnRoundComplete?.Invoke();
 
+        bool isDayEnd = false;
         // Progress Time of Day
         if (_currentTimeOfDay == TimeOfDay.Morning) _currentTimeOfDay = TimeOfDay.Afternoon;
         else if (_currentTimeOfDay == TimeOfDay.Afternoon) _currentTimeOfDay = TimeOfDay.Evening;
@@ -150,13 +157,21 @@ public class GameSessionManager : MonoBehaviour
         {
             _currentTimeOfDay = TimeOfDay.Morning;
             _currentDay++;
-            OnDayChanged?.Invoke(_currentDay);
-            ApplyDayEndBonus();
+            isDayEnd = true;
         }
-        OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
+
+        // 演出のための停止
+        Time.timeScale = 0f;
 
         _currentRound++;
         OnRoundChanged?.Invoke(_currentRound);
+        // イベントを発火（UIが表示される）
+        OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
+        if (isDayEnd)
+            OnDayChanged?.Invoke(_currentDay);
+
+        yield return new WaitForSecondsRealtime(_transitionPauseDuration);
+        Time.timeScale = 1f;
 
         // ターゲット寿司数を更新
         UpdateTargetSushi();
@@ -172,23 +187,24 @@ public class GameSessionManager : MonoBehaviour
         _remainingTime += timeIncrease;
         OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
 
-        // If no UI, just start next round
-        StartRound();
+        if (isDayEnd)
+        {
+            ApplyDayEndBonus();
+        }
+        else
+        {
+            StartRound();
+        }
     }
 
     private void ApplyDayEndBonus()
     {
-        ShowBonusSelection();
-        Debug.Log($"Day {_currentDay - 1} Complete! Bonus Applied.");
-    }
-
-    private void ShowBonusSelection()
-    {
         if (_bonusSelectionUI != null)
         {
-            _bonusSelectionUI.SetActive(true);
             Time.timeScale = 0f; // Pause for selection
+            _bonusSelectionUI.SetActive(true);
         }
+        Debug.Log($"Day {_currentDay - 1} Complete! Bonus Applied.");
     }
 
     public void OnBonusSelected()

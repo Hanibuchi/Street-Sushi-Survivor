@@ -36,7 +36,6 @@ public class GameSessionUI : MonoBehaviour
 
     private float _lastLogTime = 0f;
     private TimeOfDay _lastTimeOfDay;
-    private bool _isDayChanging = false;
 
     private void Start()
     {
@@ -53,7 +52,7 @@ public class GameSessionUI : MonoBehaviour
             UpdateSushiUI(GameSessionManager.Instance.SushiEatenInRound, GameSessionManager.Instance.TargetSushi);
             UpdateDayUI(GameSessionManager.Instance.CurrentDay);
             UpdateRoundUI(GameSessionManager.Instance.CurrentRound);
-            
+
             _lastTimeOfDay = GameSessionManager.Instance.CurrentTimeOfDay;
             UpdateTimeOfDayUI(_lastTimeOfDay);
         }
@@ -137,7 +136,6 @@ public class GameSessionUI : MonoBehaviour
         {
             _dayTransitionUI.gameObject.SetActive(true);
             _dayTransitionUI.Setup(day);
-            _isDayChanging = true;
 
             // 日替わりSEを再生
             if (SoundManager.Instance != null && _dayChangeSE != null)
@@ -165,7 +163,7 @@ public class GameSessionUI : MonoBehaviour
 
         // 時間帯が変わった時に演出用UIを表示
         // 日が変わった時は日替わりUIを優先するため、ここでは表示しない
-        if (timeOfDay != _lastTimeOfDay && _timeTransitionUI != null && !_isDayChanging)
+        if (timeOfDay != _lastTimeOfDay && _timeTransitionUI != null && timeOfDay != TimeOfDay.Morning)
         {
             _timeTransitionUI.gameObject.SetActive(true);
             _timeTransitionUI.Setup(prevStr, nextStr);
@@ -178,7 +176,6 @@ public class GameSessionUI : MonoBehaviour
         }
 
         _lastTimeOfDay = timeOfDay;
-        _isDayChanging = false;
     }
 
     private string GetTimeOfDayJapanese(TimeOfDay timeOfDay)
