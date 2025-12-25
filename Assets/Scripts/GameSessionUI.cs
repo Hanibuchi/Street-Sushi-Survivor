@@ -27,8 +27,12 @@ public class GameSessionUI : MonoBehaviour
     [Header("Time Transition UI")]
     [SerializeField] private TimeTransitionUI _timeTransitionUI;
 
+    [Header("Day Transition UI")]
+    [SerializeField] private DayTransitionUI _dayTransitionUI;
+
     private float _lastLogTime = 0f;
     private TimeOfDay _lastTimeOfDay;
+    private bool _isDayChanging = false;
 
     private void Start()
     {
@@ -123,6 +127,14 @@ public class GameSessionUI : MonoBehaviour
             _dayText.text = $"{day}日目";
             if (_dayAnimator != null) _dayAnimator.SetTrigger("Update");
         }
+
+        // 日が変わった時に演出用UIを表示
+        if (day > 1 && _dayTransitionUI != null)
+        {
+            _dayTransitionUI.gameObject.SetActive(true);
+            _dayTransitionUI.Setup(day);
+            _isDayChanging = true;
+        }
     }
 
     private void UpdateRoundUI(int round)
@@ -142,13 +154,15 @@ public class GameSessionUI : MonoBehaviour
         if (_timeOfDayAnimator != null) _timeOfDayAnimator.SetTrigger("Update");
 
         // 時間帯が変わった時に演出用UIを表示
-        if (timeOfDay != _lastTimeOfDay && _timeTransitionUI != null)
+        // 日が変わった時は日替わりUIを優先するため、ここでは表示しない
+        if (timeOfDay != _lastTimeOfDay && _timeTransitionUI != null && !_isDayChanging)
         {
             _timeTransitionUI.gameObject.SetActive(true);
             _timeTransitionUI.Setup(prevStr, nextStr);
         }
 
         _lastTimeOfDay = timeOfDay;
+        _isDayChanging = false;
     }
 
     private string GetTimeOfDayJapanese(TimeOfDay timeOfDay)
