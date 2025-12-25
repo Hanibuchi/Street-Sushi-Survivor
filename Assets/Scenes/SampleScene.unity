@@ -3315,9 +3315,9 @@ RectTransform:
   - {fileID: 772906251}
   m_Father: {fileID: 123585877}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1007, y: -445}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -56, y: 13.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &371496699
@@ -11778,9 +11778,9 @@ RectTransform:
   - {fileID: 2108838537}
   m_Father: {fileID: 123585877}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1007, y: -376.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -56, y: 82}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1335070875
@@ -11829,7 +11829,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 624999238}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: SetRootScale
+        m_MethodName: SetSushiSensorScale
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13721,9 +13721,9 @@ RectTransform:
   - {fileID: 922173793}
   m_Father: {fileID: 123585877}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1007, y: -410.8}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -56, y: 47.700012}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1600744868

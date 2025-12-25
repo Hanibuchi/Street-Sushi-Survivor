@@ -31,6 +31,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform shockwaveSpawnPoint;
     [SerializeField] private float shockwaveSizeMultiplier = 1f;
     public float ShockwaveSizeMultiplier => shockwaveSizeMultiplier;
+
+    [Header("Sensor Settings")]
+    [SerializeField] private SushiSensor sushiSensor;
+
+    public void SetSushiSensorScale(float scale)
+    {
+        if (sushiSensor != null)
+        {
+            sushiSensor.SetSensorScale(scale);
+        }
+    }
+
     public void SetShockwaveSizeMultiplier(float multiplier)
     {
         shockwaveSizeMultiplier = multiplier;

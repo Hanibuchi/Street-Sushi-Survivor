@@ -9,6 +9,15 @@ public class SushiSensor : MonoBehaviour
     
     private List<Sushi> _trackedSushi = new List<Sushi>();
 
+    /// <summary>
+    /// センサーの範囲（オブジェクトのスケール）を設定します。
+    /// </summary>
+    /// <param name="scale">設定するスケール値</param>
+    public void SetSensorScale(float scale)
+    {
+        transform.localScale = new Vector3(scale, scale, scale);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // レイヤーで判定
