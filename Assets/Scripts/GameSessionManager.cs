@@ -189,7 +189,9 @@ public class GameSessionManager : MonoBehaviour
 
         if (isDayEnd)
         {
-            ShowBonusUI(() => StartRound());
+            var timeScale = Time.timeScale;
+            Time.timeScale = 0f;
+            ShowBonusUI(() => { Time.timeScale = timeScale; StartRound(); });
         }
         else
         {
@@ -199,10 +201,9 @@ public class GameSessionManager : MonoBehaviour
 
     public void ShowBonusUI(Action callback)
     {
-        if (_bonusUI != null && BonusManager.Instance != null)
+        if (_bonusUI != null)
         {
-            var options = BonusManager.Instance.GetRandomBonuses(3);
-            _bonusUI.Show(options, callback);
+            _bonusUI.Show(callback);
         }
         else
         {

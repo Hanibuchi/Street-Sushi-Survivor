@@ -6,52 +6,72 @@ using System;
 
 public class BonusUI : MonoBehaviour
 {
-    [SerializeField] private GameObject _bonusButtonPrefab;
-    [SerializeField] private Transform _buttonParent;
+    [System.Serializable]
+    public struct BonusUIElements
+    {
+        public TextMeshProUGUI nameText;
+        public TextMeshProUGUI descriptionText;
+        public Button selectButton;
+    }
+
+    [SerializeField] private BonusUIElements[] _bonusOptions = new BonusUIElements[3];
 
     private Action _onComplete;
+    private List<BonusData> _currentOptions;
 
     /// <summary>
     /// ボーナス選択UIを表示します。
     /// </summary>
-    /// <param name="options">表示するボーナスの選択肢</param>
     /// <param name="onComplete">選択が完了した時のコールバック</param>
-    public void Show(List<BonusOption> options, Action onComplete)
+    public void Show(Action onComplete)
     {
         _onComplete = onComplete;
+
+        if (BonusManager.Instance == null)
+        {
+            _onComplete?.Invoke();
+            return;
+        }
+
+        _currentOptions = BonusManager.Instance.GetRandomBonuses(3);
         gameObject.SetActive(true);
         Time.timeScale = 0f;
 
-        // 既存のボタンを削除
-        foreach (Transform child in _buttonParent)
+        for (int i = 0; i < _bonusOptions.Length; i++)
         {
-            Destroy(child.gameObject);
-        }
-
-        // 選択肢ボタンを生成
-        foreach (var option in options)
-        {
-            GameObject btnObj = Instantiate(_bonusButtonPrefab, _buttonParent);
-            
-            // ボタンのテキストを設定（TextMeshProUGUIがボタンの子にある想定）
-            var text = btnObj.GetComponentInChildren<TextMeshProUGUI>();
-            if (text != null) text.text = option.description;
-
-            // ボタンのクリックイベントを設定
-            var button = btnObj.GetComponent<Button>();
-            if (button != null)
+            if (i < _currentOptions.Count)
             {
-                button.onClick.AddListener(() => OnBonusSelected(option));
+                var option = _currentOptions[i];
+                var ui = _bonusOptions[i];
+
+                if (ui.nameText != null) ui.nameText.text = option.bonusName;
+                if (ui.descriptionText != null) ui.descriptionText.text = option.description;
+                
+                if (ui.selectButton != null)
+                {
+                    ui.selectButton.onClick.RemoveAllListeners();
+                    int index = i; // クロージャ用
+                    ui.selectButton.onClick.AddListener(() => OnBonusSelected(index));
+                    ui.selectButton.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                // 選択肢が足りない場合は非表示
+                _bonusOptions[i].selectButton?.gameObject.SetActive(false);
             }
         }
     }
 
-    private void OnBonusSelected(BonusOption option)
+    private void OnBonusSelected(int index)
     {
-        // ボーナスを適用
-        if (BonusManager.Instance != null)
+        if (_currentOptions != null && index < _currentOptions.Count)
         {
-            BonusManager.Instance.ApplyBonus(option);
+            // ボーナスを適用
+            if (BonusManager.Instance != null)
+            {
+                BonusManager.Instance.ApplyBonus(_currentOptions[index]);
+            }
         }
 
         // UIを閉じてコールバックを実行

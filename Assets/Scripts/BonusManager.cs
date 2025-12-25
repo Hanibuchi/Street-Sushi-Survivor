@@ -22,7 +22,7 @@ public class BonusManager : MonoBehaviour
 {
     public static BonusManager Instance { get; private set; }
 
-    [SerializeField] private List<BonusOption> _allBonuses;
+    [SerializeField] private List<BonusData> _allBonuses;
 
     private void Awake()
     {
@@ -36,10 +36,10 @@ public class BonusManager : MonoBehaviour
         }
     }
 
-    public List<BonusOption> GetRandomBonuses(int count)
+    public List<BonusData> GetRandomBonuses(int count)
     {
-        List<BonusOption> result = new List<BonusOption>();
-        List<BonusOption> pool = new List<BonusOption>(_allBonuses);
+        List<BonusData> result = new List<BonusData>();
+        List<BonusData> pool = new List<BonusData>(_allBonuses);
 
         for (int i = 0; i < count && pool.Count > 0; i++)
         {
@@ -51,23 +51,25 @@ public class BonusManager : MonoBehaviour
         return result;
     }
 
-    public void ApplyBonus(BonusOption bonus)
+    public void ApplyBonus(BonusData bonus)
     {
+        if (bonus == null) return;
+
         switch (bonus.type)
         {
             case BonusType.MoveSpeed:
-                PlayerController.Instance.SetSpeed(PlayerController.Instance.Speed + bonus.value);
+                PlayerController.Instance.SetSpeed(PlayerController.Instance.Speed);
                 break;
             case BonusType.DashCooldown:
-                PlayerController.Instance.SetDashCooldown(Mathf.Max(1f, PlayerController.Instance.DashCooldown - bonus.value));
+                PlayerController.Instance.SetDashCooldown(Mathf.Max(1f, PlayerController.Instance.DashCooldown));
                 break;
             case BonusType.ShockwaveSize:
-                PlayerController.Instance.SetShockwaveSizeMultiplier(PlayerController.Instance.ShockwaveSizeMultiplier + bonus.value);
+                PlayerController.Instance.SetShockwaveSizeMultiplier(PlayerController.Instance.ShockwaveSizeMultiplier);
                 break;
             case BonusType.TimeExtension:
-                GameSessionManager.Instance.AddTime(bonus.value);
+                GameSessionManager.Instance.AddTime(0);
                 break;
         }
-        Debug.Log($"Applied Bonus: {bonus.description}");
+        Debug.Log($"Applied Bonus: {bonus.bonusName}");
     }
 }
