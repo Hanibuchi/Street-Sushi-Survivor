@@ -54,7 +54,8 @@ public class BonusUI : MonoBehaviour
                 var ui = _bonusOptions[i];
 
                 if (ui.nameText != null) ui.nameText.text = option.bonusName;
-                if (ui.dynamicDescriptionText != null) ui.dynamicDescriptionText.text = BonusManager.Instance.GetDynamicDescription(option.type);
+                if (ui.descriptionText != null) ui.descriptionText.text = option.description;
+                if (ui.dynamicDescriptionText != null) ui.dynamicDescriptionText.text = BonusManager.Instance.GetDynamicDescription(option);
 
                 if (ui.selectButton != null)
                 {

@@ -6,8 +6,6 @@ public enum BonusType
     MoveSpeed,
     DashCooldown,
     ShockwaveSize,
-    TimeExtension,
-    SushiPoints
 }
 
 public class BonusManager : MonoBehaviour
@@ -15,6 +13,8 @@ public class BonusManager : MonoBehaviour
     public static BonusManager Instance { get; private set; }
 
     [SerializeField] private BonusDataList _bonusDataList;
+
+    private Dictionary<BonusType, int> _bonusPickCounts = new Dictionary<BonusType, int>();
 
     private void Awake()
     {
@@ -26,6 +26,15 @@ public class BonusManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public int GetBonusLevel(BonusType type)
+    {
+        if (_bonusPickCounts.TryGetValue(type, out int count))
+        {
+            return count;
+        }
+        return 0;
     }
 
     public List<BonusData> GetRandomBonuses(int count)
@@ -45,44 +54,59 @@ public class BonusManager : MonoBehaviour
         return result;
     }
 
-    public string GetDynamicDescription(BonusType type)
+    public string GetDynamicDescription(BonusData data)
     {
-        switch (type)
+        if (data == null || data.upgradeValues == null || data.upgradeValues.Count == 0) return "";
+
+        int currentLevel = GetBonusLevel(data.type);
+        string unit = "%";
+        float baseValue = 100f;
+
+        float currentValue = baseValue;
+
+        if (currentLevel > 0)
         {
-            case BonusType.MoveSpeed:
-                return "Increases your movement speed.";
-            case BonusType.DashCooldown:
-                return "Reduces the cooldown time of your dash.";
-            case BonusType.ShockwaveSize:
-                return "Increases the size of your shockwave attack.";
-            case BonusType.TimeExtension:
-                return "Extends the time limit for the current round.";
-            case BonusType.SushiPoints:
-                return "Increases the points gained from eating sushi.";
-            default:
-                return "";
+            int index = Mathf.Min(currentLevel - 1, data.upgradeValues.Count - 1);
+            currentValue = data.upgradeValues[index];
         }
+
+        // 最大レベルに達している場合
+        if (currentLevel >= data.upgradeValues.Count)
+        {
+            return $"{currentValue}{unit} (MAX)";
+        }
+
+        float nextValue = data.upgradeValues[currentLevel];
+        return $"{currentValue}{unit} -> {nextValue}{unit}";
     }
 
     public void ApplyBonus(BonusData bonus)
     {
-        if (bonus == null) return;
+        if (bonus == null || bonus.upgradeValues == null || bonus.upgradeValues.Count == 0) return;
+
+        int currentLevel = GetBonusLevel(bonus.type);
+        int nextIndex = Mathf.Min(currentLevel, bonus.upgradeValues.Count - 1);
+        float valueMultiplier = bonus.upgradeValues[nextIndex] / 100f;
 
         switch (bonus.type)
         {
             case BonusType.MoveSpeed:
-                PlayerController.Instance.SetSpeed(PlayerController.Instance.Speed);
+                PlayerController.Instance.SetSpeed(valueMultiplier);
                 break;
             case BonusType.DashCooldown:
-                PlayerController.Instance.SetDashCooldown(Mathf.Max(1f, PlayerController.Instance.DashCooldown));
+                PlayerController.Instance.SetDashCooldown(valueMultiplier);
                 break;
             case BonusType.ShockwaveSize:
-                PlayerController.Instance.SetShockwaveSizeMultiplier(PlayerController.Instance.ShockwaveSizeMultiplier);
-                break;
-            case BonusType.TimeExtension:
-                GameSessionManager.Instance.AddTime(0);
+                PlayerController.Instance.SetShockwaveSizeMultiplier(valueMultiplier);
                 break;
         }
-        Debug.Log($"Applied Bonus: {bonus.bonusName}");
+
+        // カウントを増やす
+        if (_bonusPickCounts.ContainsKey(bonus.type))
+            _bonusPickCounts[bonus.type]++;
+        else
+            _bonusPickCounts[bonus.type] = 1;
+
+        Debug.Log($"Applied Bonus: {bonus.bonusName} (Level {GetBonusLevel(bonus.type)})");
     }
 }
