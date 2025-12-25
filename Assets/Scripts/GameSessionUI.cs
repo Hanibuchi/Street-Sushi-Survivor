@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
 public class GameSessionUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _timeText;
-    [SerializeField] private TextMeshProUGUI _targetText;
+    [SerializeField] private TextMeshProUGUI _sushiCountText;
+    [SerializeField] private TextMeshProUGUI _targetSushiCountText;
+    [SerializeField] private Slider _sushiSlider;
     [SerializeField] private TextMeshProUGUI _dayText;
     [SerializeField] private TextMeshProUGUI _roundText;
     [SerializeField] private TextMeshProUGUI _timeOfDayText;
@@ -46,7 +49,7 @@ public class GameSessionUI : MonoBehaviour
     private void UpdateTimeUI(float remainingTime)
     {
         if (_timeText != null)
-            _timeText.text = $"Time: {remainingTime:F1}s";
+            _timeText.text = $"{remainingTime:F1}";
 
         // 1秒ごとにログ出力
         if (Time.time - _lastLogTime >= 1f)
@@ -58,14 +61,22 @@ public class GameSessionUI : MonoBehaviour
 
     private void UpdateSushiUI(int current, int target)
     {
-        if (_targetText != null)
-            _targetText.text = $"Sushi: {current} / {target}";
+        if (_targetSushiCountText != null)
+            _targetSushiCountText.text = $"{target}";
+        if (_sushiCountText != null)
+            _sushiCountText.text = $"{current}";
+
+        if (_sushiSlider != null)
+        {
+            _sushiSlider.maxValue = target;
+            _sushiSlider.value = current;
+        }
     }
 
     private void UpdateDayUI(int day)
     {
         if (_dayText != null)
-            _dayText.text = $"Day: {day}";
+            _dayText.text = $"{day}日目";
     }
 
     private void UpdateRoundUI(int round)
@@ -76,7 +87,16 @@ public class GameSessionUI : MonoBehaviour
 
     private void UpdateTimeOfDayUI(TimeOfDay timeOfDay)
     {
-        if (_timeOfDayText != null)
-            _timeOfDayText.text = $"Time: {timeOfDay}";
+        if (_timeOfDayText == null) return;
+
+        string timeStr = timeOfDay switch
+        {
+            TimeOfDay.Morning => "朝",
+            TimeOfDay.Afternoon => "昼",
+            TimeOfDay.Evening => "夜",
+            _ => timeOfDay.ToString()
+        };
+
+        _timeOfDayText.text = timeStr;
     }
 }
