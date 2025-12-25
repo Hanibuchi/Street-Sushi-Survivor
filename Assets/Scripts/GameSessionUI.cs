@@ -13,6 +13,12 @@ public class GameSessionUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _roundText;
     [SerializeField] private TextMeshProUGUI _timeOfDayText;
 
+    [Header("Animators")]
+    [SerializeField] private Animator _dayAnimator;
+    [SerializeField] private Animator _timeOfDayAnimator;
+    [SerializeField] private Animator _targetSushiAnimator;
+    [SerializeField] private Animator _sushiCountAnimator;
+
     [Header("OneMore UI")]
     [SerializeField] private GameObject _oneMoreUIPrefab;
     [SerializeField] private RectTransform _uiSpawnParent;
@@ -66,9 +72,17 @@ public class GameSessionUI : MonoBehaviour
     private void UpdateSushiUI(int current, int target)
     {
         if (_targetSushiCountText != null)
-            _targetSushiCountText.text = $"{target}";
+        {
+            string text = $"{target}";
+            if (_targetSushiAnimator != null && _targetSushiCountText.text != text) _targetSushiAnimator.SetTrigger("Update");
+            _targetSushiCountText.text = text;
+        }
         if (_sushiCountText != null)
-            _sushiCountText.text = $"{current}";
+        {
+            string text = $"{current}";
+            if (_sushiCountAnimator != null && _sushiCountText.text != text) _sushiCountAnimator.SetTrigger("Update");
+            _sushiCountText.text = text;
+        }
 
         if (_sushiSlider != null)
         {
@@ -88,7 +102,10 @@ public class GameSessionUI : MonoBehaviour
     private void UpdateDayUI(int day)
     {
         if (_dayText != null)
+        {
             _dayText.text = $"{day}日目";
+            if (_dayAnimator != null) _dayAnimator.SetTrigger("Update");
+        }
     }
 
     private void UpdateRoundUI(int round)
@@ -110,5 +127,6 @@ public class GameSessionUI : MonoBehaviour
         };
 
         _timeOfDayText.text = timeStr;
+        if (_timeOfDayAnimator != null) _timeOfDayAnimator.SetTrigger("Update");
     }
 }
