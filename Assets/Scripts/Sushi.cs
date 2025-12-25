@@ -9,6 +9,8 @@ public class Sushi : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private GameObject _rootObject;
 
+    public GameObject RootObject => _rootObject != null ? _rootObject : gameObject;
+
     private bool _isProcessed = false;
     public bool IsEaten => _isProcessed;
     private float _timer = 0f;

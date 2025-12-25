@@ -12362,10 +12362,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6825053181688602703, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
-      propertyPath: growthPerPoint
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 8042536184764977847, guid: 609419b4b422b224ca5545de37ea7ab9, type: 3}
       propertyPath: m_Name
       value: Bear
