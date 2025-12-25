@@ -22,6 +22,7 @@ public class DayTransitionUI : MonoBehaviour
 
         if (_animator != null)
         {
+            _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
             _animator.SetTrigger("Show");
         }
     }

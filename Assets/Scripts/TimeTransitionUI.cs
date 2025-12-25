@@ -17,6 +17,7 @@ public class TimeTransitionUI : MonoBehaviour
 
         if (TryGetComponent<Animator>(out _animator))
         {
+            _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
             _animator.SetTrigger("Show");
         }
     }

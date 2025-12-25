@@ -21,7 +21,7 @@ public class GameSessionManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private GameObject _gameOverUI;
-    [SerializeField] private GameObject _bonusSelectionUI;
+    [SerializeField] private BonusUI _bonusUI;
 
     private int _totalPoints = 0;
     private int _currentDay = 1;
@@ -189,7 +189,7 @@ public class GameSessionManager : MonoBehaviour
 
         if (isDayEnd)
         {
-            ApplyDayEndBonus();
+            ShowBonusUI(() => StartRound());
         }
         else
         {
@@ -197,21 +197,17 @@ public class GameSessionManager : MonoBehaviour
         }
     }
 
-    private void ApplyDayEndBonus()
+    public void ShowBonusUI(Action callback)
     {
-        if (_bonusSelectionUI != null)
+        if (_bonusUI != null && BonusManager.Instance != null)
         {
-            Time.timeScale = 0f; // Pause for selection
-            _bonusSelectionUI.SetActive(true);
+            var options = BonusManager.Instance.GetRandomBonuses(3);
+            _bonusUI.Show(options, callback);
         }
-        Debug.Log($"Day {_currentDay - 1} Complete! Bonus Applied.");
-    }
-
-    public void OnBonusSelected()
-    {
-        _bonusSelectionUI.SetActive(false);
-        Time.timeScale = 1f;
-        StartRound();
+        else
+        {
+            callback?.Invoke();
+        }
     }
 
     private void GameOver()
