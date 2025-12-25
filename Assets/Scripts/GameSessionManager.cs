@@ -160,6 +160,11 @@ public class GameSessionManager : MonoBehaviour
             isDayEnd = true;
         }
 
+        // 次のラウンドの準備
+        UpdateTargetSushi();
+        _sushiEatenInRound = 0;
+        OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
+
         // 演出のための停止
         Time.timeScale = 0f;
 
@@ -173,9 +178,6 @@ public class GameSessionManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(_transitionPauseDuration);
         Time.timeScale = 1f;
 
-        // ターゲット寿司数を更新
-        UpdateTargetSushi();
-
         // 日ごとの追加時間を配列から取得（配列外の場合は最後の要素を使用）
         float timeIncrease = 0f;
         if (_timeIncreasePerDayArray != null && _timeIncreasePerDayArray.Length > 0)
@@ -185,7 +187,6 @@ public class GameSessionManager : MonoBehaviour
         }
 
         _remainingTime += timeIncrease;
-        OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
 
         if (isDayEnd)
         {
