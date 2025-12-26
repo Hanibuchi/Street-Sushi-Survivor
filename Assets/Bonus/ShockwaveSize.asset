@@ -10,8 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3db180a4481e2bb439752b67efda5bd0, type: 3}
-  m_Name: NewBonusData
+  m_Name: ShockwaveSize
   m_EditorClassIdentifier: 
-  bonusName: "\u3066\uFF53\u3064\u3068"
-  description: "\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A\u3066\u3059\u3063\u3068\u3060\u3088\u3048\u304A"
-  type: 0
+  bonusName: "\u706B\u4E8B\u5834\u306E\u718A\u529B"
+  description: "\u885D\u6483\u6CE2\u306E\u7BC4\u56F2\u3092\u5897\u52A0\u3055\u305B\u308B\u3002"
+  type: 2
+  upgradeValues:
+  - 100
+  - 120
+  - 140
+  - 160
+  - 180

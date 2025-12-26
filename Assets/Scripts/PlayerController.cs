@@ -35,6 +35,10 @@ public class PlayerController : MonoBehaviour
     [Header("Sensor Settings")]
     [SerializeField] private SushiSensor sushiSensor;
 
+    private float _baseSpeed;
+    private float _baseDashCooldown;
+    private float _baseShockwaveSizeMultiplier;
+
     public void SetSushiSensorScale(float scale)
     {
         if (sushiSensor != null)
@@ -45,12 +49,12 @@ public class PlayerController : MonoBehaviour
 
     public void SetShockwaveSizeMultiplier(float multiplier)
     {
-        shockwaveSizeMultiplier = multiplier;
+        shockwaveSizeMultiplier = _baseShockwaveSizeMultiplier * multiplier;
     }
 
-    public void SetSpeed(float value)
+    public void SetSpeed(float multiplier)
     {
-        speed = value;
+        speed = _baseSpeed * multiplier;
     }
 
     public void SetRootScale(float scale)
@@ -63,9 +67,9 @@ public class PlayerController : MonoBehaviour
         wasabiStunDuration = duration;
     }
 
-    public void SetDashCooldown(float cooldown)
+    public void SetDashCooldown(float multiplier)
     {
-        dashCooldown = cooldown;
+        dashCooldown = _baseDashCooldown * multiplier;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -158,6 +162,9 @@ public class PlayerController : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            _baseSpeed = speed;
+            _baseDashCooldown = dashCooldown;
+            _baseShockwaveSizeMultiplier = shockwaveSizeMultiplier;
         }
         else
         {

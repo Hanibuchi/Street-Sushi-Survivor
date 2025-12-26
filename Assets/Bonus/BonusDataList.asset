@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: BonusDataList
   m_EditorClassIdentifier: 
   bonuses:
+  - {fileID: 11400000, guid: fe5e2c32c79a2f34d8ddda586eb032fa, type: 2}
   - {fileID: 11400000, guid: 8fadd5af6c144ef42a2721614b746083, type: 2}
-  - {fileID: 11400000, guid: 8fadd5af6c144ef42a2721614b746083, type: 2}
-  - {fileID: 11400000, guid: 8fadd5af6c144ef42a2721614b746083, type: 2}
+  - {fileID: 11400000, guid: 29fdcd3f8a83fb648ab2a360fd9625db, type: 2}

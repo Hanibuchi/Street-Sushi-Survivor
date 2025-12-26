@@ -59,24 +59,26 @@ public class BonusManager : MonoBehaviour
         if (data == null || data.upgradeValues == null || data.upgradeValues.Count == 0) return "";
 
         int currentLevel = GetBonusLevel(data.type);
+
+        // 単位とベース表示値の設定
         string unit = "%";
-        float baseValue = 100f;
+        float baseValue = data.upgradeValues[0];
 
         float currentValue = baseValue;
 
         if (currentLevel > 0)
         {
-            int index = Mathf.Min(currentLevel - 1, data.upgradeValues.Count - 1);
+            int index = Mathf.Min(currentLevel, data.upgradeValues.Count - 1);
             currentValue = data.upgradeValues[index];
         }
 
         // 最大レベルに達している場合
-        if (currentLevel >= data.upgradeValues.Count)
+        if (currentLevel >= data.upgradeValues.Count - 1)
         {
             return $"{currentValue}{unit} (MAX)";
         }
 
-        float nextValue = data.upgradeValues[currentLevel];
+        float nextValue = data.upgradeValues[currentLevel + 1];
         return $"{currentValue}{unit} -> {nextValue}{unit}";
     }
 
@@ -85,19 +87,20 @@ public class BonusManager : MonoBehaviour
         if (bonus == null || bonus.upgradeValues == null || bonus.upgradeValues.Count == 0) return;
 
         int currentLevel = GetBonusLevel(bonus.type);
-        int nextIndex = Mathf.Min(currentLevel, bonus.upgradeValues.Count - 1);
-        float valueMultiplier = bonus.upgradeValues[nextIndex] / 100f;
+        int nextIndex = Mathf.Min(currentLevel + 1, bonus.upgradeValues.Count - 1);
+        float rawValue = bonus.upgradeValues[nextIndex];
+        float multiplier = rawValue / bonus.upgradeValues[0];
 
         switch (bonus.type)
         {
             case BonusType.MoveSpeed:
-                PlayerController.Instance.SetSpeed(valueMultiplier);
+                PlayerController.Instance.SetSpeed(multiplier);
                 break;
             case BonusType.DashCooldown:
-                PlayerController.Instance.SetDashCooldown(valueMultiplier);
+                PlayerController.Instance.SetDashCooldown(multiplier);
                 break;
             case BonusType.ShockwaveSize:
-                PlayerController.Instance.SetShockwaveSizeMultiplier(valueMultiplier);
+                PlayerController.Instance.SetShockwaveSizeMultiplier(multiplier);
                 break;
         }
 
