@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3db180a4481e2bb439752b67efda5bd0, type: 3}
-  m_Name: ShockwaveSize
+  m_Name: RareCarSpawnRate
   m_EditorClassIdentifier: 
-  bonusName: "\u706B\u4E8B\u5834\u306E\u718A\u529B"
-  description: "\u885D\u6483\u6CE2\u306E\u7BC4\u56F2\u304C\u5897\u52A0\u3059\u308B\u3002"
-  type: 2
+  bonusName: "\u5FDC\u63F4\u8981\u8ACB"
+  description: "\u30EC\u30A2\u8ECA\u306E\u5272\u5408\u304C\u5897\u3048\u308B\u3002"
+  type: 9
   upgradeValues:
   - 100
   - 150

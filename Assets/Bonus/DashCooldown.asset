@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: DashCooldown
   m_EditorClassIdentifier: 
   bonusName: "CD\u6E1B\u5C11"
-  description: "\u30C0\u30C3\u30B7\u30E5\u306E\u30AF\u30FC\u30EB\u30C0\u30A6\u30F3\u6642\u9593\u3092\u6E1B\u5C11\u3055\u305B\u308B\u3002"
+  description: "\u30C0\u30C3\u30B7\u30E5\u306E\u30AF\u30FC\u30EB\u30C0\u30A6\u30F3\u6642\u9593\u304C\u6E1B\u5C11\u3059\u308B\u3002"
   type: 1
   upgradeValues:
   - 100
-  - 80
-  - 60
-  - 40
+  - 70
+  - 50
+  - 30
   - 20
+  - 10
+  - 5
+  - 3
+  - 2
+  - 1

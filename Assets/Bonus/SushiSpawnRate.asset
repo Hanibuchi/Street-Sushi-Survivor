@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3db180a4481e2bb439752b67efda5bd0, type: 3}
-  m_Name: ShockwaveSize
+  m_Name: SushiSpawnRate
   m_EditorClassIdentifier: 
-  bonusName: "\u706B\u4E8B\u5834\u306E\u718A\u529B"
-  description: "\u885D\u6483\u6CE2\u306E\u7BC4\u56F2\u304C\u5897\u52A0\u3059\u308B\u3002"
-  type: 2
+  bonusName: "\u96E8\u306E\u3061\u5BFF\u53F8"
+  description: "\u964D\u308B\u304A\u5BFF\u53F8\u306E\u91CF\u304C\u5897\u3048\u308B\u3002"
+  type: 4
   upgradeValues:
   - 100
   - 150

@@ -15572,7 +15572,7 @@ MonoBehaviour:
   _corner2: {fileID: 83611972}
   _meanSpawnInterval: 0.2
   _rareSushiProbability: 0.1
-  _wasabiProbability: 0.1
+  _wasabiProbability: 0.2
   _raycastHeight: 30
   _groundLayer:
     serializedVersion: 2

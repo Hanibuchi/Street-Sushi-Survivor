@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3db180a4481e2bb439752b67efda5bd0, type: 3}
-  m_Name: ShockwaveSize
+  m_Name: DashSpeed
   m_EditorClassIdentifier: 
-  bonusName: "\u706B\u4E8B\u5834\u306E\u718A\u529B"
-  description: "\u885D\u6483\u6CE2\u306E\u7BC4\u56F2\u304C\u5897\u52A0\u3059\u308B\u3002"
-  type: 2
+  bonusName: "\u30C0\u30C3\u30B7\u30E5\u901F\u5EA6"
+  description: "\u30C0\u30C3\u30B7\u30E5\u6642\u306E\u79FB\u52D5\u901F\u5EA6\u500D\u7387\u304C\u5897\u52A0\u3059\u308B\u3002"
+  type: 11
   upgradeValues:
-  - 100
-  - 150
   - 200
   - 250
   - 300
@@ -27,3 +25,5 @@ MonoBehaviour:
   - 500
   - 550
   - 600
+  - 650
+  - 700
