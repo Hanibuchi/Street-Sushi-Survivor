@@ -18,20 +18,44 @@ public class CarSettings : MonoBehaviour
     [Tooltip("プレイヤーからこの距離以上離れている場合は爆発演出をスキップして即座に破棄する")]
     [SerializeField] private float _explosionDistanceThreshold = 50f;
 
+    private float _baseRareCarProbability;
+    private float _baseFixedInterval;
+    private float _baseAverageRandomInterval;
+    private float _explosionScaleMultiplier = 1f;
+
     public float RareCarProbability => _rareCarProbability;
     public float FixedInterval => _fixedInterval;
     public float AverageRandomInterval => _averageRandomInterval;
     public float ExplosionDistanceThreshold => _explosionDistanceThreshold;
+    public float ExplosionScaleMultiplier => _explosionScaleMultiplier;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            _baseRareCarProbability = _rareCarProbability;
+            _baseFixedInterval = _fixedInterval;
+            _baseAverageRandomInterval = _averageRandomInterval;
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SetSpawnRateMultiplier(float multiplier)
+    {
+        _averageRandomInterval = _baseAverageRandomInterval / multiplier;
+    }
+
+    public void SetRareCarProbabilityMultiplier(float multiplier)
+    {
+        _rareCarProbability = _baseRareCarProbability * multiplier;
+    }
+
+    public void SetExplosionScaleMultiplier(float multiplier)
+    {
+        _explosionScaleMultiplier = multiplier;
     }
 }

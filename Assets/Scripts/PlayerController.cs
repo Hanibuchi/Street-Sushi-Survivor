@@ -38,12 +38,23 @@ public class PlayerController : MonoBehaviour
     private float _baseSpeed;
     private float _baseDashCooldown;
     private float _baseShockwaveSizeMultiplier;
+    private float _baseDashSpeed;
+    private float _baseDashDuration;
+    private float _baseSushiSensorScale;
 
     public void SetSushiSensorScale(float scale)
     {
         if (sushiSensor != null)
         {
             sushiSensor.SetSensorScale(scale);
+        }
+    }
+
+    public void SetSushiSensorScaleMultiplier(float multiplier)
+    {
+        if (sushiSensor != null)
+        {
+            sushiSensor.SetSensorScale(_baseSushiSensorScale * multiplier);
         }
     }
 
@@ -55,6 +66,16 @@ public class PlayerController : MonoBehaviour
     public void SetSpeed(float multiplier)
     {
         speed = _baseSpeed * multiplier;
+    }
+
+    public void SetDashSpeedMultiplier(float multiplier)
+    {
+        dashSpeed = _baseDashSpeed * multiplier;
+    }
+
+    public void SetDashDurationMultiplier(float multiplier)
+    {
+        attackDashDuration = _baseDashDuration * multiplier;
     }
 
     public void SetRootScale(float scale)
@@ -165,6 +186,12 @@ public class PlayerController : MonoBehaviour
             _baseSpeed = speed;
             _baseDashCooldown = dashCooldown;
             _baseShockwaveSizeMultiplier = shockwaveSizeMultiplier;
+            _baseDashSpeed = dashSpeed;
+            _baseDashDuration = attackDashDuration;
+            if (sushiSensor != null)
+            {
+                _baseSushiSensorScale = sushiSensor.transform.localScale.x;
+            }
         }
         else
         {

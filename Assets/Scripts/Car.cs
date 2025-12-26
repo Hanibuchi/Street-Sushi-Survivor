@@ -124,7 +124,11 @@ public class Car : MonoBehaviour
         // 爆発エフェクトの生成
         if (_explosionPrefab != null)
         {
-            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            if (CarSettings.Instance != null)
+            {
+                explosion.transform.localScale *= CarSettings.Instance.ExplosionScaleMultiplier;
+            }
         }
 
         // 寿司の召喚

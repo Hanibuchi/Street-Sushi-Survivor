@@ -24,6 +24,10 @@ public class SushiSpawner : MonoBehaviour
     private float _nextSpawnTime;
     private bool _isSpawning = true;
 
+    private float _baseMeanSpawnInterval;
+    private float _baseRareSushiProbability;
+    private float _baseWasabiProbability;
+
     // スポーン範囲の決定
     float minX;
     float maxX;
@@ -84,11 +88,30 @@ public class SushiSpawner : MonoBehaviour
     /// </summary>
     public void StopSpawning() => IsSpawning = false;
 
+    public void SetSpawnRateMultiplier(float multiplier)
+    {
+        // 間隔を短くすることで湧き率を上げる
+        MeanSpawnInterval = _baseMeanSpawnInterval / multiplier;
+    }
+
+    public void SetRareSushiProbabilityMultiplier(float multiplier)
+    {
+        RareSushiProbability = _baseRareSushiProbability * multiplier;
+    }
+
+    public void SetWasabiProbabilityMultiplier(float multiplier)
+    {
+        WasabiProbability = _baseWasabiProbability * multiplier;
+    }
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            _baseMeanSpawnInterval = _meanSpawnInterval;
+            _baseRareSushiProbability = _rareSushiProbability;
+            _baseWasabiProbability = _wasabiProbability;
         }
         else
         {

@@ -6,6 +6,16 @@ public enum BonusType
     MoveSpeed,
     DashCooldown,
     ShockwaveSize,
+    SushiSensorRange,
+    SushiSpawnRate,
+    SushiDuration,
+    RareSushiSpawnRate,
+    WasabiSpawnRate,
+    CarSpawnRate,
+    RareCarSpawnRate,
+    CarExplosionRange,
+    DashSpeed,
+    DashDuration
 }
 
 public class BonusManager : MonoBehaviour
@@ -101,6 +111,36 @@ public class BonusManager : MonoBehaviour
                 break;
             case BonusType.ShockwaveSize:
                 PlayerController.Instance.SetShockwaveSizeMultiplier(multiplier);
+                break;
+            case BonusType.SushiSensorRange:
+                PlayerController.Instance.SetSushiSensorScaleMultiplier(multiplier);
+                break;
+            case BonusType.SushiSpawnRate:
+                SushiSpawner.Instance.SetSpawnRateMultiplier(multiplier);
+                break;
+            case BonusType.SushiDuration:
+                SushiSettings.Instance.SetDespawnTimeMultiplier(multiplier);
+                break;
+            case BonusType.RareSushiSpawnRate:
+                SushiSpawner.Instance.SetRareSushiProbabilityMultiplier(multiplier);
+                break;
+            case BonusType.WasabiSpawnRate:
+                SushiSpawner.Instance.SetWasabiProbabilityMultiplier(multiplier);
+                break;
+            case BonusType.CarSpawnRate:
+                CarSettings.Instance.SetSpawnRateMultiplier(multiplier);
+                break;
+            case BonusType.RareCarSpawnRate:
+                CarSettings.Instance.SetRareCarProbabilityMultiplier(multiplier);
+                break;
+            case BonusType.CarExplosionRange:
+                CarSettings.Instance.SetExplosionScaleMultiplier(multiplier);
+                break;
+            case BonusType.DashSpeed:
+                PlayerController.Instance.SetDashSpeedMultiplier(multiplier);
+                break;
+            case BonusType.DashDuration:
+                PlayerController.Instance.SetDashDurationMultiplier(multiplier);
                 break;
         }
 
