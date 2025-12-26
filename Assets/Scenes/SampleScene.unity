@@ -15570,7 +15570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _corner1: {fileID: 1592525852}
   _corner2: {fileID: 83611972}
-  _meanSpawnInterval: 0.2
+  _meanSpawnInterval: 0.1
   _rareSushiProbability: 0.1
   _wasabiProbability: 0.2
   _raycastHeight: 30
@@ -17712,13 +17712,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3dd1d3b45334041b00dc525193bf62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialRoundTime: 30
+  _initialRoundTime: 60
   _timeIncreasePerDayArray:
-  - 10
-  - 15
   - 20
-  - 30
-  _targetSushiPerDayArray: 05000000080000000c000000
+  _targetSushiPerDayArray: 080000000c00000010000000160000001c000000220000002a000000320000003a000000440000004e0000005800000064000000700000007c0000008a00000098000000a6000000b6000000c6000000d6000000e8000000fa0000000c0100002001000034010000480100005e010000740100008a010000a2010000ba010000d2010000ec01000006020000200200003c020000580200007402000092020000b0020000ce020000ee0200000e0300002e030000500300007203000094030000b8030000dc03000000040000
   _transitionPauseDuration: 2
   _gameOverUI: {fileID: 0}
   _bonusUI: {fileID: 390237413}
@@ -20090,7 +20087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 204d485ee621ddd458170c20aa5b6c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rareCarProbability: 0.1
+  _rareCarProbability: 0.32
   _fixedInterval: 2
   _averageRandomInterval: 10
   _explosionDistanceThreshold: 30
@@ -20636,7 +20633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac673305e3f77f243ae0e674a4e55b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _despawnTime: 20
+  _despawnTime: 10
 --- !u!4 &2036456022
 Transform:
   m_ObjectHideFlags: 0
