@@ -89,7 +89,7 @@ public class BonusManager : MonoBehaviour
         }
 
         float nextValue = data.upgradeValues[currentLevel + 1];
-        return $"{currentValue}{unit} -> {nextValue}{unit}";
+        return $"{currentValue}{unit} → {nextValue}{unit}";
     }
 
     public void ApplyBonus(BonusData bonus)
