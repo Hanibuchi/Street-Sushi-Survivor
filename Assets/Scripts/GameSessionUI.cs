@@ -24,6 +24,12 @@ public class GameSessionUI : MonoBehaviour
     [SerializeField] private GameObject _oneMoreUIPrefab;
     [SerializeField] private RectTransform _uiSpawnParent;
 
+    [Header("Floating Text UI")]
+    [SerializeField] private GameObject _floatingTextPrefab;
+    [SerializeField] private RectTransform _sushiCountFloatingParent;
+    [SerializeField] private RectTransform _targetSushiFloatingParent;
+    [SerializeField] private RectTransform _timeFloatingParent;
+
     [Header("Time Transition UI")]
     [SerializeField] private TimeTransitionUI _timeTransitionUI;
 
@@ -36,6 +42,9 @@ public class GameSessionUI : MonoBehaviour
 
     private float _lastLogTime = 0f;
     private TimeOfDay _lastTimeOfDay;
+    private int _lastSushiCount;
+    private int _lastTargetSushi;
+    private float _lastRemainingTime;
 
     private void Start()
     {
@@ -48,8 +57,12 @@ public class GameSessionUI : MonoBehaviour
             GameSessionManager.Instance.OnTimeOfDayChanged += UpdateTimeOfDayUI;
 
             // 初期表示の更新
-            UpdateTimeUI(GameSessionManager.Instance.RemainingTime);
-            UpdateSushiUI(GameSessionManager.Instance.SushiEatenInRound, GameSessionManager.Instance.TargetSushi);
+            _lastRemainingTime = GameSessionManager.Instance.RemainingTime;
+            _lastSushiCount = GameSessionManager.Instance.SushiEatenInRound;
+            _lastTargetSushi = GameSessionManager.Instance.TargetSushi;
+
+            UpdateTimeUI(_lastRemainingTime);
+            UpdateSushiUI(_lastSushiCount, _lastTargetSushi);
             UpdateDayUI(GameSessionManager.Instance.CurrentDay);
             UpdateRoundUI(GameSessionManager.Instance.CurrentRound);
 
@@ -72,6 +85,14 @@ public class GameSessionUI : MonoBehaviour
 
     private void UpdateTimeUI(float remainingTime)
     {
+        // 残り時間が増加した場合に浮遊テキストを表示
+        if (remainingTime > _lastRemainingTime + 0.1f)
+        {
+            float diff = remainingTime - _lastRemainingTime;
+            SpawnFloatingText(_timeFloatingParent, $"+{diff:F0}");
+        }
+        _lastRemainingTime = remainingTime;
+
         if (_timeText != null)
             _timeText.text = $"{remainingTime:F1}";
 
@@ -95,6 +116,30 @@ public class GameSessionUI : MonoBehaviour
 
     private void UpdateSushiUI(int current, int target)
     {
+        // 目標寿司数の更新
+        if (target != _lastTargetSushi)
+        {
+            int diff = target - _lastTargetSushi;
+            if (diff > 0)
+            {
+                string sign = diff > 0 ? "+" : "";
+                SpawnFloatingText(_targetSushiFloatingParent, $"{sign}{diff}");
+            }
+            _lastTargetSushi = target;
+        }
+
+        // 食べた寿司数の更新
+        if (current != _lastSushiCount)
+        {
+            int diff = current - _lastSushiCount;
+            if (diff > 0)
+            {
+                string sign = diff > 0 ? "+" : "";
+                SpawnFloatingText(_sushiCountFloatingParent, $"{sign}{diff}");
+            }
+            _lastSushiCount = current;
+        }
+
         if (_targetSushiCountText != null)
         {
             string text = $"{target}";
@@ -187,5 +232,31 @@ public class GameSessionUI : MonoBehaviour
             TimeOfDay.Evening => "夕",
             _ => timeOfDay.ToString()
         };
+    }
+
+    private void SpawnFloatingText(RectTransform parent, string text)
+    {
+        if (_floatingTextPrefab == null || parent == null) return;
+
+        GameObject go = Instantiate(_floatingTextPrefab, parent);
+        
+        // RectTransformの設定
+        RectTransform rect = go.GetComponent<RectTransform>();
+        if (rect != null)
+        {
+            rect.pivot = new Vector2(0, 0);
+            rect.anchorMin = new Vector2(0, 0);
+            rect.anchorMax = new Vector2(0, 0);
+            rect.anchoredPosition = Vector2.zero;
+        }
+
+        var tmp = go.GetComponentInChildren<TextMeshProUGUI>();
+        if (tmp != null)
+        {
+            tmp.text = text;
+        }
+
+        // 2秒後に破棄
+        Destroy(go, 2f);
     }
 }
