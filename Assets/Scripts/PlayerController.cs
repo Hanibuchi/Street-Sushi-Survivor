@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 10f;
     public float Speed => speed;
     [SerializeField] private float rotationSpeed = 720f;
-    [SerializeField] private float dashSpeed = 25f;
+    [SerializeField] private float dashSpeedRatio = 2f;
+    public float DashSpeed => speed * dashSpeedRatio;
     [SerializeField] private float dashCooldown = 10f;
     [SerializeField] private float wasabiStunDuration = 2f;
     [SerializeField] private float jumpHeight = 1.5f;
@@ -38,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private float _baseSpeed;
     private float _baseDashCooldown;
     private float _baseShockwaveSizeMultiplier;
-    private float _baseDashSpeed;
+    private float _baseDashSpeedRatio;
     private float _baseDashDuration;
     private float _baseSushiSensorScale;
 
@@ -70,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetDashSpeedMultiplier(float multiplier)
     {
-        dashSpeed = _baseDashSpeed * multiplier;
+        dashSpeedRatio = _baseDashSpeedRatio * multiplier;
     }
 
     public void SetDashDurationMultiplier(float multiplier)
@@ -186,7 +187,7 @@ public class PlayerController : MonoBehaviour
             _baseSpeed = speed;
             _baseDashCooldown = dashCooldown;
             _baseShockwaveSizeMultiplier = shockwaveSizeMultiplier;
-            _baseDashSpeed = dashSpeed;
+            _baseDashSpeedRatio = dashSpeedRatio;
             _baseDashDuration = attackDashDuration;
             if (sushiSensor != null)
             {
@@ -264,7 +265,7 @@ public class PlayerController : MonoBehaviour
             HandleAttackInput();
             HandleJumpInput();
 
-            float currentSpeed = isDashing ? dashSpeed : speed;
+            float currentSpeed = isDashing ? DashSpeed : speed;
 
             // 攻撃の振りかぶり中（isAttacking かつ !isDashing）以外は操作可能
             if (moveAction != null && (!isAttacking || isDashing))
