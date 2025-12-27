@@ -96,6 +96,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // セッションが開始されていない場合は何もしない
+        if (GameSessionManager.Instance != null && !GameSessionManager.Instance.IsSessionActive) return;
+
         // 寿司との接触判定
         Sushi sushi = other.GetComponentInChildren<Sushi>();
         if (sushi != null)

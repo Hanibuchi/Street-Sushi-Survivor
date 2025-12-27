@@ -33,6 +33,7 @@ public class GameSessionManager : MonoBehaviour
     private int _sushiEatenInRound;
     private bool _isGameOver = false;
     private bool _isPaused = false;
+    private bool _isSessionActive = false;
 
     public int TotalPoints => _totalPoints;
     public int CurrentDay => _currentDay;
@@ -41,7 +42,9 @@ public class GameSessionManager : MonoBehaviour
     public float RemainingTime => _remainingTime;
     public int TargetSushi => _targetSushi;
     public int SushiEatenInRound => _sushiEatenInRound;
+    public bool IsSessionActive => _isSessionActive;
 
+    public event Action OnSessionStart;
     public event Action OnRoundStart;
     public event Action OnRoundComplete;
     public event Action OnGameOver;
@@ -82,7 +85,9 @@ public class GameSessionManager : MonoBehaviour
         _remainingTime = _initialRoundTime;
         _isGameOver = false;
         _sushiEatenInRound = 0;
+        _isSessionActive = true;
 
+        OnSessionStart?.Invoke();
         OnDayChanged?.Invoke(_currentDay);
         OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
         OnRoundChanged?.Invoke(_currentRound);
@@ -110,7 +115,7 @@ public class GameSessionManager : MonoBehaviour
 
     private void Update()
     {
-        if (_isGameOver || _isPaused) return;
+        if (!_isSessionActive || _isGameOver || _isPaused) return;
 
         _remainingTime -= Time.deltaTime;
         OnTimeChanged?.Invoke(_remainingTime);
@@ -123,7 +128,7 @@ public class GameSessionManager : MonoBehaviour
 
     public void OnSushiEaten(int points)
     {
-        if (_isGameOver) return;
+        if (!_isSessionActive || _isGameOver) return;
 
         _totalPoints += points;
         _sushiEatenInRound += points;

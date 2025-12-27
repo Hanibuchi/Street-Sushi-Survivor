@@ -8,9 +8,9 @@ public class Title : MonoBehaviour
     [SerializeField] private Button _startButton;
     [SerializeField] private AudioClip _startSE;
     [SerializeField] private float _startDelay = 1.5f;
+    [SerializeField] private GameObject _titleCamera;
 
     private bool _isStarted = false;
-    private Coroutine _spawnCoroutine;
 
     private void Start()
     {
@@ -28,10 +28,10 @@ public class Title : MonoBehaviour
         // ボタンを無効化
         if (_startButton != null) _startButton.interactable = false;
 
-        // 寿司の生成を停止
-        if (_spawnCoroutine != null)
+        // カメラを非アクティブにする
+        if (_titleCamera != null)
         {
-            StopCoroutine(_spawnCoroutine);
+            _titleCamera.SetActive(false);
         }
 
         // 効果音を鳴らす

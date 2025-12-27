@@ -48,8 +48,12 @@ public class GameSessionUI : MonoBehaviour
 
     private void Start()
     {
+        // 初期状態は非表示
+        gameObject.SetActive(false);
+
         if (GameSessionManager.Instance != null)
         {
+            GameSessionManager.Instance.OnSessionStart += OnSessionStart;
             GameSessionManager.Instance.OnTimeChanged += UpdateTimeUI;
             GameSessionManager.Instance.OnSushiCountChanged += UpdateSushiUI;
             GameSessionManager.Instance.OnDayChanged += UpdateDayUI;
@@ -75,12 +79,18 @@ public class GameSessionUI : MonoBehaviour
     {
         if (GameSessionManager.Instance != null)
         {
+            GameSessionManager.Instance.OnSessionStart -= OnSessionStart;
             GameSessionManager.Instance.OnTimeChanged -= UpdateTimeUI;
             GameSessionManager.Instance.OnSushiCountChanged -= UpdateSushiUI;
             GameSessionManager.Instance.OnDayChanged -= UpdateDayUI;
             GameSessionManager.Instance.OnRoundChanged -= UpdateRoundUI;
             GameSessionManager.Instance.OnTimeOfDayChanged -= UpdateTimeOfDayUI;
         }
+    }
+
+    private void OnSessionStart()
+    {
+        gameObject.SetActive(true);
     }
 
     private void UpdateTimeUI(float remainingTime)
