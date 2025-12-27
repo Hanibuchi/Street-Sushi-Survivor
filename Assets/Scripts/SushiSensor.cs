@@ -5,6 +5,7 @@ public class SushiSensor : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private float _attractionSpeed = 5f;
+    [SerializeField] private float _snapDistance = 0.5f;
     [SerializeField] private LayerMask _sushiLayer;
 
     private List<Sushi> _trackedSushi = new List<Sushi>();
@@ -73,8 +74,18 @@ public class SushiSensor : MonoBehaviour
 
             // プレイヤーに向かって移動（RootObjectを移動させる）
             Transform targetTransform = sushi.RootObject.transform;
-            Vector3 direction = (transform.position - targetTransform.position).normalized;
-            targetTransform.position += direction * _attractionSpeed * Time.deltaTime;
+            float distance = Vector3.Distance(transform.position, targetTransform.position);
+
+            if (distance < _snapDistance)
+            {
+                // 一定距離未満なら直接プレイヤーの座標に移動
+                targetTransform.position = transform.position;
+            }
+            else
+            {
+                Vector3 direction = (transform.position - targetTransform.position).normalized;
+                targetTransform.position += direction * _attractionSpeed * Time.deltaTime;
+            }
         }
     }
 }
