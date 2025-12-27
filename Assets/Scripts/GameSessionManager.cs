@@ -242,6 +242,13 @@ public class GameSessionManager : MonoBehaviour
         // 銃声が鳴る前の短い猶予
         yield return new WaitForSeconds(_preGunshotDelay);
 
+        // 結果をGameManagerに保存
+        if (GameManager.Instance != null)
+        {
+            float finalScale = PlayerController.Instance != null ? PlayerController.Instance.CurrentScale : 1.0f;
+            GameManager.Instance.SaveResults(finalScale, _totalPoints);
+        }
+
         OnGameOver?.Invoke();
         Debug.Log("Game Over!");
 
