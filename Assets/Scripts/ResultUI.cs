@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
 
@@ -7,24 +9,44 @@ public class ResultUI : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private GameObject _contentRoot;
     [SerializeField] private TextMeshProUGUI _sushiCountText;
+    [SerializeField] private Button _titleButton;
+    [SerializeField] private Button _tweetButton;
+
+    [Header("Animation")]
+    [SerializeField] private Animator _animator;
+    [SerializeField] private float _countDuration = 1.5f;
 
     [Header("Audio")]
-    [SerializeField] private AudioClip _resultBGM;
     [SerializeField] private AudioClip _resultSE;
 
-    public void Setup()
+    [Header("Tweet Settings")]
+    [SerializeField] private string _tweetTextFormat = "Street Sushi Survivorで {0} 個の寿司を食べました！ #StreetSushiSurvivor";
+
+    private void Awake()
     {
-        // 最初は非表示
         if (_contentRoot != null) _contentRoot.SetActive(false);
 
-        // スコア設定
-        if (_sushiCountText != null && GameManager.Instance != null)
-        {
-            _sushiCountText.text = $"{GameManager.Instance.TotalSushiEaten}";
-        }
+        if (_titleButton != null) _titleButton.onClick.AddListener(OnTitleButtonClicked);
+        if (_tweetButton != null) _tweetButton.onClick.AddListener(OnTweetButtonClicked);
     }
 
     public void Show()
+    {
+        // 表示
+        if (_contentRoot != null) _contentRoot.SetActive(true);
+
+        // アニメーション開始
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Show");
+        }
+    }
+
+
+    /// <summary>
+    /// スコアのカウントアップ演出を開始します（Animatorのイベント等から呼び出し可能）
+    /// </summary>
+    public void StartCountScore()
     {
         // SE再生
         if (SoundManager.Instance != null && _resultSE != null)
@@ -32,13 +54,45 @@ public class ResultUI : MonoBehaviour
             SoundManager.Instance.PlaySE(_resultSE);
         }
 
-        // BGM再生
-        if (SoundManager.Instance != null && _resultBGM != null)
+        if (GameManager.Instance != null)
         {
-            SoundManager.Instance.PlayBGM(_resultBGM, true);
+            StartCoroutine(CountScoreRoutine(GameManager.Instance.TotalSushiEaten));
+        }
+    }
+
+    private IEnumerator CountScoreRoutine(int targetScore)
+    {
+        float elapsed = 0f;
+        while (elapsed < _countDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed / _countDuration;
+            int currentDisplayScore = Mathf.FloorToInt(targetScore * progress);
+
+            if (_sushiCountText != null)
+            {
+                _sushiCountText.text = $"{currentDisplayScore}";
+            }
+            yield return null;
         }
 
-        // 表示
-        if (_contentRoot != null) _contentRoot.SetActive(true);
+        if (_sushiCountText != null)
+        {
+            _sushiCountText.text = $"{targetScore}";
+        }
+    }
+
+    private void OnTitleButtonClicked()
+    {
+        SceneManager.LoadScene("Title");
+    }
+
+    private void OnTweetButtonClicked()
+    {
+        if (GameManager.Instance == null) return;
+
+        string message = string.Format(_tweetTextFormat, GameManager.Instance.TotalSushiEaten);
+        string url = "https://twitter.com/intent/tweet?text=" + UnityEngine.Networking.UnityWebRequest.EscapeURL(message);
+        Application.OpenURL(url);
     }
 }

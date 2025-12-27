@@ -2574,6 +2574,8 @@ GameObject:
   - component: {fileID: 246870922}
   - component: {fileID: 246870921}
   - component: {fileID: 246870925}
+  - component: {fileID: 246870926}
+  - component: {fileID: 246870927}
   m_Layer: 5
   m_Name: ResultCanvas
   m_TagString: Untagged
@@ -2678,8 +2680,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _contentRoot: {fileID: 246870920}
   _sushiCountText: {fileID: 951270453}
-  _resultBGM: {fileID: 0}
+  _titleButton: {fileID: 844965444}
+  _tweetButton: {fileID: 1591644080}
+  _animator: {fileID: 246870926}
+  _countDuration: 1.5
   _resultSE: {fileID: 0}
+  _tweetTextFormat: "Street Sushi Survivor\u3067 {0} \u500B\u306E\u5BFF\u53F8\u3092\u98DF\u3079\u307E\u3057\u305F\uFF01
+    #StreetSushiSurvivor"
+--- !u!95 &246870926
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246870920}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5f05552f4f62dab43b3e5af74f9f4e6a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!225 &246870927
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246870920}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &249544555
 PrefabInstance:
   m_ObjectHideFlags: 0
