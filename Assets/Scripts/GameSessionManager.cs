@@ -14,6 +14,7 @@ public class GameSessionManager : MonoBehaviour
     public static GameSessionManager Instance { get; private set; }
 
     [Header("Session Settings")]
+    [SerializeField] private bool _autoStart = true;
     [SerializeField] private float _initialRoundTime = 30f;
     [SerializeField] private float[] _timeIncreasePerDayArray = new float[] { 10f, 15f, 20f };
     [SerializeField] private int[] _targetSushiPerDayArray = new int[] { 5, 8, 12 };
@@ -65,7 +66,10 @@ public class GameSessionManager : MonoBehaviour
 
     private void Start()
     {
-        StartNewSession();
+        if (_autoStart)
+        {
+            StartNewSession();
+        }
     }
 
     public void StartNewSession()
