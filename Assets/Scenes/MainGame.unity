@@ -2986,7 +2986,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 20
   m_TargetDisplay: 0
 --- !u!224 &361496503
 RectTransform:
@@ -3644,7 +3644,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 20
+  m_SortingOrder: 30
   m_TargetDisplay: 0
 --- !u!224 &390237417
 RectTransform:
@@ -7253,7 +7253,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_TargetDisplay: 0
 --- !u!224 &711857520
 RectTransform:
@@ -24374,7 +24374,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!224 &2143175758
 RectTransform:
@@ -24601,26 +24601,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SettingsCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 1180126459084193914, guid: a5d800198845efd4a89e289a7ea8d301, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2850739050714200541, guid: a5d800198845efd4a89e289a7ea8d301, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3967384952540866450, guid: a5d800198845efd4a89e289a7ea8d301, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6406850211017064371, guid: a5d800198845efd4a89e289a7ea8d301, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7749499603385303386, guid: a5d800198845efd4a89e289a7ea8d301, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -24631,6 +24611,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 330585546}
+  - {fileID: 128821285}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1435507736}
@@ -24653,6 +24634,5 @@ SceneRoots:
   - {fileID: 390237417}
   - {fileID: 1948249767}
   - {fileID: 1934370985}
-  - {fileID: 128821285}
   - {fileID: 2143175758}
   - {fileID: 711857520}
