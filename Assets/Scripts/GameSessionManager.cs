@@ -23,7 +23,6 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private float _transitionPauseDuration = 2.0f;
 
     [Header("UI References")]
-    [SerializeField] private GameObject _gameOverUI;
     [SerializeField] private BonusUI _bonusUI;
 
     [Header("GameOver Settings")]
