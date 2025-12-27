@@ -14,6 +14,12 @@ public class Title : MonoBehaviour
 
     private void Start()
     {
+        // 画面を元に戻す
+        if (SceneTransitionUI.Instance != null)
+        {
+            SceneTransitionUI.Instance.FadeToClear();
+        }
+
         if (_startButton != null)
         {
             _startButton.onClick.AddListener(OnStartButtonClicked);

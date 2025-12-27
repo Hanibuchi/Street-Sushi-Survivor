@@ -93,6 +93,21 @@ public class ResultUI : MonoBehaviour
 
     private void OnTitleButtonClicked()
     {
+        StartCoroutine(BackToTitleRoutine());
+    }
+
+    private IEnumerator BackToTitleRoutine()
+    {
+        // ボタンを無効化して連打防止
+        if (_titleButton != null) _titleButton.interactable = false;
+
+        // 画面を真っ黒にする
+        if (SceneTransitionUI.Instance != null)
+        {
+            SceneTransitionUI.Instance.FadeToBlack();
+            yield return new WaitForSeconds(1.0f); // フェード待ち
+        }
+
         SceneManager.LoadScene("MainGame");
     }
 
@@ -100,8 +115,8 @@ public class ResultUI : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        string message = string.Format(_tweetTextFormat, GameManager.Instance.TotalSushiEaten);
-        string url = "https://twitter.com/intent/tweet?text=" + UnityEngine.Networking.UnityWebRequest.EscapeURL(message);
-        Application.OpenURL(url);
+        // string message = string.Format(_tweetTextFormat, GameManager.Instance.TotalSushiEaten);
+        // string url = "https://twitter.com/intent/tweet?text=" + UnityEngine.Networking.UnityWebRequest.EscapeURL(message);
+        // Application.OpenURL(url);
     }
 }
