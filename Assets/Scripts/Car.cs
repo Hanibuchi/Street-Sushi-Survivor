@@ -97,6 +97,17 @@ public class Car : MonoBehaviour
         if (_isExploded) return;
         _isExploded = true;
 
+        // 寿司の召喚（演出の有無に関わらず実行）
+        if (_sushiPrefab != null)
+        {
+            GameObject spawnedSushi = Instantiate(_sushiPrefab, transform.position, Quaternion.identity);
+            Sushi sushiComponent = spawnedSushi.GetComponentInChildren<Sushi>();
+            if (sushiComponent != null)
+            {
+                sushiComponent.SetIdle();
+            }
+        }
+
         // プレイヤーから遠い場合は演出なしで即座に破棄
         if (PlayerController.Instance != null && CarSettings.Instance != null)
         {
@@ -128,17 +139,6 @@ public class Car : MonoBehaviour
             if (CarSettings.Instance != null)
             {
                 explosion.transform.localScale *= CarSettings.Instance.ExplosionScaleMultiplier;
-            }
-        }
-
-        // 寿司の召喚
-        if (_sushiPrefab != null)
-        {
-            GameObject spawnedSushi = Instantiate(_sushiPrefab, transform.position, Quaternion.identity);
-            Sushi sushiComponent = spawnedSushi.GetComponentInChildren<Sushi>();
-            if (sushiComponent != null)
-            {
-                sushiComponent.SetIdle();
             }
         }
 
