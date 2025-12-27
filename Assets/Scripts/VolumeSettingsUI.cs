@@ -8,6 +8,7 @@ public class VolumeSettingsUI : MonoBehaviour
     [SerializeField] private GameObject _settingsPanel;
     [SerializeField] private Slider _bgmSlider;
     [SerializeField] private Slider _seSlider;
+    [SerializeField] private Toggle _mobileControlsToggle;
     [SerializeField] private Button _openButton;
     [SerializeField] private Button _closeButton;
 
@@ -49,6 +50,15 @@ public class VolumeSettingsUI : MonoBehaviour
         _bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
         _seSlider.onValueChanged.AddListener(OnSEVolumeChanged);
         
+        if (_mobileControlsToggle != null)
+        {
+            if (MobileControlsUI.Instance != null)
+            {
+                _mobileControlsToggle.isOn = MobileControlsUI.Instance.IsVisible;
+            }
+            _mobileControlsToggle.onValueChanged.AddListener(OnMobileControlsToggled);
+        }
+        
         _openButton.onClick.AddListener(OpenPanel);
         _closeButton.onClick.AddListener(ClosePanel);
 
@@ -76,6 +86,16 @@ public class VolumeSettingsUI : MonoBehaviour
                 SoundManager.Instance.PlaySE(_volumeTestClip);
                 _lastTestSETime = Time.time;
             }
+        }
+    }
+
+    private void OnMobileControlsToggled(bool value)
+    {
+        if (MobileControlsUI.Instance != null)
+        {
+            MobileControlsUI.Instance.SetVisible(value);
+            PlayerPrefs.SetInt("ShowMobileControls", value ? 1 : 0);
+            PlayerPrefs.Save();
         }
     }
 

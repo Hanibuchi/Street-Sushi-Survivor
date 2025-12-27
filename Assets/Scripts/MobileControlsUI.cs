@@ -12,6 +12,16 @@ public class MobileControlsUI : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (controlsContainer == null)
         {
             controlsContainer = gameObject;
@@ -20,18 +30,28 @@ public class MobileControlsUI : MonoBehaviour
         SetupVisibility();
     }
 
+    public static MobileControlsUI Instance { get; private set; }
+
+    public void SetVisible(bool visible)
+    {
+        if (controlsContainer != null)
+        {
+            controlsContainer.SetActive(visible);
+        }
+    }
+
+    public bool IsVisible => controlsContainer != null && controlsContainer.activeSelf;
+
     private void SetupVisibility()
     {
-        if (!hideOnNonMobilePlatforms) return;
-
-        // スマホ（Android, iOS）以外、かつエディタでない場合は非表示にする
-        bool isMobile = Application.isMobilePlatform;
+        // PlayerPrefs から設定を読み込む（デフォルトはプラットフォーム依存）
+        bool defaultVisibility = Application.isMobilePlatform;
         
 #if UNITY_EDITOR
-        // エディタ上では動作確認のために表示したままにする（必要に応じて変更可能）
-        controlsContainer.SetActive(true);
-#else
-        controlsContainer.SetActive(isMobile);
+        defaultVisibility = true;
 #endif
+
+        bool isVisible = PlayerPrefs.GetInt("ShowMobileControls", defaultVisibility ? 1 : 0) == 1;
+        SetVisible(isVisible);
     }
 }
