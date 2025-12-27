@@ -54,6 +54,7 @@ public class GameSessionUI : MonoBehaviour
         if (GameSessionManager.Instance != null)
         {
             GameSessionManager.Instance.OnSessionStart += OnSessionStart;
+            GameSessionManager.Instance.OnGameOver += OnGameOver;
             GameSessionManager.Instance.OnTimeChanged += UpdateTimeUI;
             GameSessionManager.Instance.OnSushiCountChanged += UpdateSushiUI;
             GameSessionManager.Instance.OnDayChanged += UpdateDayUI;
@@ -80,6 +81,7 @@ public class GameSessionUI : MonoBehaviour
         if (GameSessionManager.Instance != null)
         {
             GameSessionManager.Instance.OnSessionStart -= OnSessionStart;
+            GameSessionManager.Instance.OnGameOver -= OnGameOver;
             GameSessionManager.Instance.OnTimeChanged -= UpdateTimeUI;
             GameSessionManager.Instance.OnSushiCountChanged -= UpdateSushiUI;
             GameSessionManager.Instance.OnDayChanged -= UpdateDayUI;
@@ -91,6 +93,11 @@ public class GameSessionUI : MonoBehaviour
     private void OnSessionStart()
     {
         gameObject.SetActive(true);
+    }
+
+    private void OnGameOver()
+    {
+        gameObject.SetActive(false);
     }
 
     private void UpdateTimeUI(float remainingTime)

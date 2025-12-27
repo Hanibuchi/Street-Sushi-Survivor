@@ -96,8 +96,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // セッションが開始されていない場合は何もしない
-        if (GameSessionManager.Instance != null && !GameSessionManager.Instance.IsSessionActive) return;
+        // セッションが開始されていない、または死亡している場合は何もしない
+        if (GameSessionManager.Instance != null && (!GameSessionManager.Instance.IsSessionActive || GameSessionManager.Instance.IsGameOver)) return;
+        if (isDead) return;
 
         // 寿司との接触判定
         Sushi sushi = other.GetComponentInChildren<Sushi>();
@@ -171,6 +172,7 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool isStunned = false;
+    private bool isDead = false;
     private float lastDashStartTime = -999f;
     private float lastDashEndTime = -999f;
     private Coroutine attackCoroutine;
@@ -233,6 +235,7 @@ public class PlayerController : MonoBehaviour
         if (GameSessionManager.Instance != null)
         {
             GameSessionManager.Instance.OnTotalPointsChanged += UpdateScale;
+            GameSessionManager.Instance.OnGameOver += OnGameOver;
             UpdateScale(GameSessionManager.Instance.TotalPoints);
         }
     }
@@ -242,6 +245,33 @@ public class PlayerController : MonoBehaviour
         if (GameSessionManager.Instance != null)
         {
             GameSessionManager.Instance.OnTotalPointsChanged -= UpdateScale;
+            GameSessionManager.Instance.OnGameOver -= OnGameOver;
+        }
+    }
+
+    private void OnGameOver()
+    {
+        isDead = true;
+
+        // 入力を無効化
+        moveAction?.Disable();
+        attackAction?.Disable();
+        jumpAction?.Disable();
+
+        // 死亡アニメーション
+        if (animator != null)
+        {
+            animator.SetBool("Death", true);
+            SetIdle(false);
+            SetStunned(false);
+            SetRunning(false);
+            SetWalking(false);
+        }
+
+        // 寿司センサーを無効化
+        if (sushiSensor != null)
+        {
+            sushiSensor.gameObject.SetActive(false);
         }
     }
 
@@ -253,7 +283,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (controller == null) return;
+        if (controller == null || isDead) return;
 
         // 地面接地判定と重力の初期化
         if (controller.isGrounded && velocity.y < 0)

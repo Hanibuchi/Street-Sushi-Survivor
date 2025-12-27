@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 
@@ -24,11 +25,17 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private GameObject _gameOverUI;
     [SerializeField] private BonusUI _bonusUI;
 
+    [Header("GameOver Settings")]
+    [SerializeField] private AudioClip _gunshotSE;
+    [SerializeField] private string _resultSceneName = "Result";
+    [SerializeField] private float _preGunshotDelay = 0.5f;
+    [SerializeField] private float _gameOverDelay = 3.0f;
+
     private int _totalPoints = 0;
     private int _currentDay = 1;
     private TimeOfDay _currentTimeOfDay = TimeOfDay.Morning;
     private int _currentRound = 1;
-    private float _remainingTime;
+    [SerializeField] float _remainingTime;
     private int _targetSushi;
     private int _sushiEatenInRound;
     private bool _isGameOver = false;
@@ -42,6 +49,7 @@ public class GameSessionManager : MonoBehaviour
     public float RemainingTime => _remainingTime;
     public int TargetSushi => _targetSushi;
     public int SushiEatenInRound => _sushiEatenInRound;
+    public bool IsGameOver => _isGameOver;
     public bool IsSessionActive => _isSessionActive;
 
     public event Action OnSessionStart;
@@ -223,10 +231,27 @@ public class GameSessionManager : MonoBehaviour
 
     private void GameOver()
     {
+        if (_isGameOver) return;
         _isGameOver = true;
-        Time.timeScale = 0f;
-        if (_gameOverUI != null) _gameOverUI.SetActive(true);
+
+        StartCoroutine(GameOverSequence());
+    }
+
+    private IEnumerator GameOverSequence()
+    {
+        // 銃声が鳴る前の短い猶予
+        yield return new WaitForSeconds(_preGunshotDelay);
+
         OnGameOver?.Invoke();
         Debug.Log("Game Over!");
+
+        if (SoundManager.Instance != null && _gunshotSE != null)
+        {
+            SoundManager.Instance.PlaySE(_gunshotSE);
+        }
+
+        // 倒れてからシーン遷移までの待ち時間
+        yield return new WaitForSeconds(_gameOverDelay);
+        SceneManager.LoadScene(_resultSceneName);
     }
 }

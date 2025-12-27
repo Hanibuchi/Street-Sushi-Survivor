@@ -10,6 +10,27 @@ public class DashUI : MonoBehaviour
     [SerializeField] private Color _cooldownColor = Color.red;
     [SerializeField] private Color _readyColor = Color.green;
 
+    private void Start()
+    {
+        if (GameSessionManager.Instance != null)
+        {
+            GameSessionManager.Instance.OnGameOver += OnGameOver;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameSessionManager.Instance != null)
+        {
+            GameSessionManager.Instance.OnGameOver -= OnGameOver;
+        }
+    }
+
+    private void OnGameOver()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void Update()
     {
         if (PlayerController.Instance == null || _dashSlider == null) return;

@@ -18504,6 +18504,11 @@ MonoBehaviour:
   _transitionPauseDuration: 2
   _gameOverUI: {fileID: 0}
   _bonusUI: {fileID: 390237413}
+  _gunshotSE: {fileID: 8300000, guid: 6dd7024f00606b44eb5884197a66a893, type: 3}
+  _resultSceneName: Result
+  _preGunshotDelay: 0.5
+  _gameOverDelay: 3
+  _remainingTime: 0
 --- !u!4 &1791166295
 Transform:
   m_ObjectHideFlags: 0
