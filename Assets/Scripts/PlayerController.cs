@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
             // ワサビレイヤーかどうかの判定
             bool isWasabi = other.gameObject.layer == LayerMask.NameToLayer("Wasabi");
 
-            if (isWasabi)
+            if (isWasabi && !sushi.IsProcessed)
             {
                 PlaySE(wasabiEatClip);
                 sushi.Eat();

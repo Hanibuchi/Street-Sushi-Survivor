@@ -11,14 +11,15 @@ public class Sushi : MonoBehaviour
 
     public GameObject RootObject => _rootObject != null ? _rootObject : gameObject;
 
+    public bool IsProcessed => _isProcessed;
     private bool _isProcessed = false;
-    public bool IsEaten => _isProcessed;
+    public bool IsEaten => eaten;
     private float _timer = 0f;
 
     /// <summary>
     /// この寿司を食べた時に得られるポイント
     /// </summary>
-    public int Points => _isProcessed ? 0 : _points;
+    public int Points => eaten ? 0 : _points;
 
     /// <summary>
     /// これがワサビ（障害物）かどうか
@@ -59,13 +60,14 @@ public class Sushi : MonoBehaviour
         }
     }
 
+    bool eaten = false;
     /// <summary>
     /// 寿司を食べる処理を開始します。
     /// </summary>
     public void Eat()
     {
-        if (_isProcessed) return;
-        _isProcessed = true;
+        if (eaten) return;
+        eaten = true;
 
         if (_animator != null)
         {
@@ -83,7 +85,7 @@ public class Sushi : MonoBehaviour
     private void Despawn()
     {
         if (_isProcessed) return;
-        // _isProcessed = true;
+        _isProcessed = true;
 
         if (_animator != null)
         {
