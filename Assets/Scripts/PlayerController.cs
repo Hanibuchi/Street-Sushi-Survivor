@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
     [SerializeField] private string attackTriggerName = "Attack1";
-    [SerializeField] private float attackDashDelay = 0.3f;
+    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float attackDelay = 0.3f;
     [SerializeField] private float attackDashDuration = 5f;
 
     [Header("Attack Effects")]
@@ -165,6 +166,7 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction attackAction;
+    private InputAction dashAction;
     private InputAction jumpAction;
     private Vector3 velocity;
     [SerializeField] float gravity = -9.81f;
@@ -175,7 +177,9 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
     private float lastDashStartTime = -999f;
     private float lastDashEndTime = -999f;
+    private float lastAttackEndTime = -999f;
     private Coroutine attackCoroutine;
+    private Coroutine dashCoroutine;
     private Coroutine stunCoroutine;
 
     public bool IsDashing => isDashing;
@@ -216,10 +220,12 @@ public class PlayerController : MonoBehaviour
 
         moveAction = InputSystem.actions.FindAction("Move");
         attackAction = InputSystem.actions.FindAction("Attack");
+        dashAction = InputSystem.actions.FindAction("Sprint");
         jumpAction = InputSystem.actions.FindAction("Jump");
 
         moveAction?.Enable();
         attackAction?.Enable();
+        dashAction?.Enable();
         jumpAction?.Enable();
 
         if (controller == null)
@@ -256,6 +262,7 @@ public class PlayerController : MonoBehaviour
         // 入力を無効化
         moveAction?.Disable();
         attackAction?.Disable();
+        dashAction?.Disable();
         jumpAction?.Disable();
 
         // 死亡アニメーション
@@ -296,12 +303,13 @@ public class PlayerController : MonoBehaviour
         if (!isStunned)
         {
             HandleAttackInput();
+            HandleDashInput();
             HandleJumpInput();
 
             float currentSpeed = isDashing ? DashSpeed : speed;
 
-            // 攻撃の振りかぶり中（isAttacking かつ !isDashing）以外は操作可能
-            if (moveAction != null && (!isAttacking || isDashing))
+            // 操作可能
+            if (moveAction != null)
             {
                 Vector2 moveInput = moveAction.ReadValue<Vector2>();
                 move = new Vector3(moveInput.x, 0f, moveInput.y) * currentSpeed;
@@ -340,10 +348,21 @@ public class PlayerController : MonoBehaviour
     {
         if (attackAction != null && attackAction.WasPressedThisFrame() && !isAttacking)
         {
+            if (Time.time >= lastAttackEndTime + attackCooldown)
+            {
+                attackCoroutine = StartCoroutine(AttackRoutine());
+            }
+        }
+    }
+
+    private void HandleDashInput()
+    {
+        if (dashAction != null && dashAction.WasPressedThisFrame() && !isDashing)
+        {
             // クールダウンのチェック（ダッシュ終了時間から計測）
             if (Time.time >= lastDashEndTime + dashCooldown)
             {
-                attackCoroutine = StartCoroutine(AttackSequence());
+                dashCoroutine = StartCoroutine(DashRoutine());
             }
             else
             {
@@ -354,7 +373,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (jumpAction != null && jumpAction.WasPressedThisFrame() && controller.isGrounded && (!isAttacking || isDashing))
+        if (jumpAction != null && jumpAction.WasPressedThisFrame() && controller.isGrounded)
         {
             // サイズに応じてジャンプ力を調整
             float currentScale = transform.root.localScale.x;
@@ -365,47 +384,50 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackSequence()
+    private IEnumerator AttackRoutine()
     {
         isAttacking = true;
-        lastDashStartTime = Time.time; // ダッシュ（攻撃シーケンス）開始時間を記録
         TriggerAttack();
         PlaySE(attackClip);
 
         // 攻撃の振りかぶり待ち
-        yield return new WaitForSeconds(attackDashDelay);
+        yield return new WaitForSeconds(attackDelay);
         SpawnShockwave();
 
-        // ダッシュ開始
+        isAttacking = false;
+        lastAttackEndTime = Time.time;
+        attackCoroutine = null;
+    }
+
+    private IEnumerator DashRoutine()
+    {
         isDashing = true;
+        lastDashStartTime = Time.time;
 
         yield return new WaitForSeconds(attackDashDuration);
 
-        ResetAttackState();
+        isDashing = false;
+        lastDashEndTime = Time.time;
+        dashCoroutine = null;
     }
 
     /// <summary>
-    /// 障害物にぶつかった時などに外部から呼び出すことで、攻撃・ダッシュ状態を強制リセットします。
+    /// 障害物にぶつかった時などに外部から呼び出すことで、ダッシュ状態を強制リセットします。
     /// </summary>
     public void InterruptAction()
     {
-        if (isAttacking || isDashing)
+        if (isDashing)
         {
-            ResetAttackState();
+            if (dashCoroutine != null) StopCoroutine(dashCoroutine);
+            isDashing = false;
+            lastDashEndTime = Time.time;
+            dashCoroutine = null;
         }
     }
 
     private void ResetAttackState()
     {
-        if (attackCoroutine != null)
-        {
-            StopCoroutine(attackCoroutine);
-            attackCoroutine = null;
-        }
-        isAttacking = false;
-        isDashing = false;
-        lastDashEndTime = Time.time; // ダッシュ終了時間を記録
-        // 次のUpdateで通常のUpdateAnimationが呼ばれ、状態が復元されます
+        InterruptAction();
     }
 
     private void UpdateAnimation(Vector3 move)
