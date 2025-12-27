@@ -15,8 +15,8 @@ Standard Unity Asset Store EULA
 https://assetstore.unity.com/packages/3d/environments/simplepoly-city-low-poly-assets-58899
 Standard Unity Asset Store EULA
 
-- Free Sound Effects Pack by Olivier Girardot
-https://assetstore.unity.com/packages/audio/sound-fx/free-sound-effects-pack-155776
+- Wooden Fences: Medieval Stylized Modular Pack Free by Mokume Craft
+https://assetstore.unity.com/packages/3d/props/wooden-fences-medieval-stylized-modular-pack-free-288849
 Standard Unity Asset Store EULA
 
 ## VFX
@@ -47,4 +47,8 @@ Standard Unity Asset Store EULA
 
 - Vehicle - Essentials by Nox_Sound
 https://assetstore.unity.com/packages/audio/sound-fx/transportation/vehicle-essentials-194951
+Standard Unity Asset Store EULA
+
+- Free Sound Effects Pack by Olivier Girardot
+https://assetstore.unity.com/packages/audio/sound-fx/free-sound-effects-pack-155776
 Standard Unity Asset Store EULA
