@@ -20,6 +20,13 @@ public class CarSpawner : MonoBehaviour
     {
         while (true)
         {
+            // セッションが開始されていない場合は待機
+            if (GameSessionManager.Instance == null || !GameSessionManager.Instance.IsSessionActive)
+            {
+                yield return new WaitForSeconds(1f);
+                continue;
+            }
+
             if (CarSettings.Instance == null)
             {
                 yield return new WaitForSeconds(1f);

@@ -52,6 +52,13 @@ public class SushiSensor : MonoBehaviour
 
     private void Update()
     {
+        // セッションが開始されていない場合は何もしない
+        if (GameSessionManager.Instance != null && !GameSessionManager.Instance.IsSessionActive)
+        {
+            if (_trackedSushi.Count > 0) _trackedSushi.Clear();
+            return;
+        }
+
         // 追跡中の寿司をプレイヤーに引き寄せる
         for (int i = _trackedSushi.Count - 1; i >= 0; i--)
         {
