@@ -101,6 +101,12 @@ public class ResultUI : MonoBehaviour
         // ボタンを無効化して連打防止
         if (_titleButton != null) _titleButton.interactable = false;
 
+        // BGMを停止
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.StopBGM();
+        }
+
         // 画面を真っ黒にする
         if (SceneTransitionUI.Instance != null)
         {

@@ -22,10 +22,11 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private int[] _targetSushiPerDayArray = new int[] { 5, 8, 12 };
     [SerializeField] private float _transitionPauseDuration = 2.0f;
 
-    [Header("UI References")]
+    [Header("Bonus Settings")]
     [SerializeField] private BonusUI _bonusUI;
 
-    [Header("GameOver Settings")]
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip _gameBGM;
     [SerializeField] private AudioClip _gunshotSE;
     [SerializeField] private string _resultSceneName = "Result";
     [SerializeField] private float _preGunshotDelay = 0.5f;
@@ -94,6 +95,11 @@ public class GameSessionManager : MonoBehaviour
         _isGameOver = false;
         _sushiEatenInRound = 0;
         _isSessionActive = true;
+
+        if (SoundManager.Instance != null && _gameBGM != null)
+        {
+            SoundManager.Instance.PlayBGM(_gameBGM);
+        }
 
         OnSessionStart?.Invoke();
         OnDayChanged?.Invoke(_currentDay);
@@ -233,6 +239,12 @@ public class GameSessionManager : MonoBehaviour
     {
         if (_isGameOver) return;
         _isGameOver = true;
+        _isSessionActive = false;
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.StopBGM();
+        }
 
         StartCoroutine(GameOverSequence());
     }

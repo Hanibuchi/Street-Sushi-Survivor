@@ -7651,7 +7651,7 @@ MonoBehaviour:
   - {fileID: 967544281}
   - {fileID: 1422438725}
   _thresholds: 1400000064000000f4010000
-  _bGM: {fileID: 0}
+  _bGM: {fileID: 8300000, guid: c11c33767c93d0d419a66971ae0d6bae, type: 3}
 --- !u!4 &610408978
 Transform:
   m_ObjectHideFlags: 0
