@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
     [SerializeField] private string attackTriggerName = "Attack1";
+    [SerializeField] private string jumpTriggerName = "Jump";
     [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private float attackDelay = 0.3f;
     [SerializeField] private float attackDashDuration = 5f;
@@ -381,6 +382,8 @@ public class PlayerController : MonoBehaviour
 
             // ジャンプ速度の計算: v = sqrt(h * -2 * g)
             velocity.y = Mathf.Sqrt(scaledJumpHeight * -2f * gravity);
+
+            TriggerJump();
         }
     }
 
@@ -503,6 +506,14 @@ public class PlayerController : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger(attackTriggerName);
+        }
+    }
+
+    public void TriggerJump()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(jumpTriggerName);
         }
     }
 
