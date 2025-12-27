@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
+using unityroom.Api;
 
 public enum TimeOfDay
 {
@@ -248,6 +249,9 @@ public class GameSessionManager : MonoBehaviour
             float finalScale = PlayerController.Instance != null ? PlayerController.Instance.CurrentScale : 1.0f;
             GameManager.Instance.SaveResults(finalScale, _totalPoints);
         }
+
+        // unityroomランキングにスコア送信
+        UnityroomApiClient.Instance?.SendScore(1, _totalPoints, ScoreboardWriteMode.HighScoreDesc);
 
         OnGameOver?.Invoke();
         Debug.Log("Game Over!");

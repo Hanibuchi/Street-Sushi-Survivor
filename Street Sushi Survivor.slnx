@@ -58,6 +58,7 @@
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
   <Project Path="Unity.Recorder.Base.csproj" />
+  <Project Path="unityroom.csproj" />
   <Project Path="Unity.RenderPipeline.Universal.ShaderLibrary.csproj" />
   <Project Path="Unity.Bindings.OpenImageIO.Editor.csproj" />
   <Project Path="Unity.Rendering.LightTransport.Editor.csproj" />
