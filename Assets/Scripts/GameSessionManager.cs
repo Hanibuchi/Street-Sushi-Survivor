@@ -32,7 +32,7 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private float _preGunshotDelay = 0.5f;
     [SerializeField] private float _gameOverDelay = 3.0f;
 
-    private int _totalPoints = 0;
+    [SerializeField] int _totalPoints = 0;
     private int _currentDay = 1;
     private TimeOfDay _currentTimeOfDay = TimeOfDay.Morning;
     private int _currentRound = 1;

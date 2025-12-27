@@ -19428,6 +19428,7 @@ MonoBehaviour:
   _resultSceneName: Result
   _preGunshotDelay: 0.5
   _gameOverDelay: 3
+  _totalPoints: 0
   _remainingTime: 0
 --- !u!4 &1791166295
 Transform:

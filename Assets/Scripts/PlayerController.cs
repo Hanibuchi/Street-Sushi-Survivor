@@ -285,7 +285,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateScale(int totalPoints)
     {
-        float newScale = baseScale + (totalPoints * growthPerPoint);
+        // 寿司の量に対して n^0.5 (平方根) のオーダーでサイズを増加させる
+        float newScale = baseScale + (Mathf.Sqrt(totalPoints) * growthPerPoint);
         SetRootScale(newScale);
     }
 
