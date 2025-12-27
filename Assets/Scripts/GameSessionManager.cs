@@ -261,8 +261,16 @@ public class GameSessionManager : MonoBehaviour
             SoundManager.Instance.PlaySE(_gunshotSE);
         }
 
-        // 倒れてからシーン遷移までの待ち時間
+        // 倒れてからフェード開始までの待ち時間
         yield return new WaitForSeconds(_gameOverDelay);
+
+        // 画面を真っ黒にする
+        if (SceneTransitionUI.Instance != null)
+        {
+            SceneTransitionUI.Instance.FadeToBlack();
+            yield return new WaitForSeconds(1.0f); // フェードアニメーション待ち
+        }
+
         SceneManager.LoadScene(_resultSceneName);
     }
 }

@@ -7645,7 +7645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _resultUI: {fileID: 246870925}
-  _uiDisplayDelay: 2
+  _uiDisplayDelay: 3
   _rankObjects:
   - {fileID: 939581201}
   - {fileID: 967544281}
