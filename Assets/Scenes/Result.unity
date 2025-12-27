@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _finalBearScale: 2
-  _totalPoints: 100
+  _totalPoints: 500
 --- !u!4 &46088537
 Transform:
   m_ObjectHideFlags: 0
@@ -2732,7 +2732,6 @@ MonoBehaviour:
   _countDuration: 1.5
   _resultSE: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
   _countTickSE: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
-  _tickInterval: 0.05
   _tweetTextFormat: "Street Sushi Survivor\u3067 {0} \u500B\u306E\u5BFF\u53F8\u3092\u98DF\u3079\u307E\u3057\u305F\uFF01
     #StreetSushiSurvivor"
 --- !u!95 &246870926
@@ -7647,6 +7646,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resultUI: {fileID: 246870925}
   _uiDisplayDelay: 2
+  _rankObjects:
+  - {fileID: 939581201}
+  - {fileID: 967544281}
+  - {fileID: 1422438725}
+  _thresholds: 1400000064000000f4010000
   _bGM: {fileID: 0}
 --- !u!4 &610408978
 Transform:
@@ -10657,7 +10661,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1917527392}
   - {fileID: 810353328}
   - {fileID: 822020203}
   - {fileID: 1814211679}
@@ -12085,7 +12088,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 939581202}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1457905265864571983, guid: f275cf071b01fec4999473937f10b25f, type: 3}
       propertyPath: m_Name
@@ -12093,7 +12096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2265404835202803445, guid: f275cf071b01fec4999473937f10b25f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.89900017
+      value: -29.351
       objectReference: {fileID: 0}
     - target: {fileID: 2265404835202803445, guid: f275cf071b01fec4999473937f10b25f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12101,7 +12104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2265404835202803445, guid: f275cf071b01fec4999473937f10b25f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.6769981
+      value: 34.177
       objectReference: {fileID: 0}
     - target: {fileID: 2265404835202803445, guid: f275cf071b01fec4999473937f10b25f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -21128,11 +21131,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.958062, y: 2.433641, z: 6.3205423}
   m_Center: {x: -0.006408453, y: 1.2162137, z: -0.19318247}
---- !u!4 &1917527392 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2265404835202803445, guid: f275cf071b01fec4999473937f10b25f, type: 3}
-  m_PrefabInstance: {fileID: 1032388976}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1921909755
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26879,6 +26877,7 @@ SceneRoots:
   - {fileID: 244893735}
   - {fileID: 1409561609}
   - {fileID: 447040799}
+  - {fileID: 1032388976}
   - {fileID: 939581202}
   - {fileID: 967544282}
   - {fileID: 1422438726}
