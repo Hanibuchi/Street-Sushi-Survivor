@@ -5,8 +5,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Game Results")]
-    public float FinalBearScale { get; private set; }
-    public int TotalSushiEaten { get; private set; }
+    [SerializeField] float _finalBearScale;
+    public float FinalBearScale { get => _finalBearScale; private set => _finalBearScale = value; }
+    [SerializeField] int _totalPoints;
+    public int TotalSushiEaten { get => _totalPoints; private set => _totalPoints = value; }
 
     private void Awake()
     {

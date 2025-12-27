@@ -18,6 +18,8 @@ public class ResultUI : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip _resultSE;
+    [SerializeField] private AudioClip _countTickSE;
+    [SerializeField] private float _tickInterval = 0.05f;
 
     [Header("Tweet Settings")]
     [SerializeField] private string _tweetTextFormat = "Street Sushi Survivorで {0} 個の寿司を食べました！ #StreetSushiSurvivor";
@@ -48,12 +50,6 @@ public class ResultUI : MonoBehaviour
     /// </summary>
     public void StartCountScore()
     {
-        // SE再生
-        if (SoundManager.Instance != null && _resultSE != null)
-        {
-            SoundManager.Instance.PlaySE(_resultSE);
-        }
-
         if (GameManager.Instance != null)
         {
             StartCoroutine(CountScoreRoutine(GameManager.Instance.TotalSushiEaten));
@@ -63,6 +59,8 @@ public class ResultUI : MonoBehaviour
     private IEnumerator CountScoreRoutine(int targetScore)
     {
         float elapsed = 0f;
+        float lastTickTime = 0f;
+
         while (elapsed < _countDuration)
         {
             elapsed += Time.deltaTime;
@@ -71,20 +69,36 @@ public class ResultUI : MonoBehaviour
 
             if (_sushiCountText != null)
             {
-                _sushiCountText.text = $"{currentDisplayScore}";
+                _sushiCountText.text = $"{currentDisplayScore}個";
             }
+
+            // 一定時間ごとにカウント音を鳴らす
+            if (elapsed - lastTickTime >= _tickInterval)
+            {
+                if (SoundManager.Instance != null && _countTickSE != null)
+                {
+                    SoundManager.Instance.PlaySE(_countTickSE);
+                }
+                lastTickTime = elapsed;
+            }
+
             yield return null;
         }
 
+        // SE再生
+        if (SoundManager.Instance != null && _resultSE != null)
+        {
+            SoundManager.Instance.PlaySE(_resultSE);
+        }
         if (_sushiCountText != null)
         {
-            _sushiCountText.text = $"{targetScore}";
+            _sushiCountText.text = $"{targetScore}個";
         }
     }
 
     private void OnTitleButtonClicked()
     {
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadScene("MainGame");
     }
 
     private void OnTweetButtonClicked()
