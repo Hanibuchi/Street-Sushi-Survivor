@@ -19,7 +19,6 @@ public class ResultUI : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip _resultSE;
     [SerializeField] private AudioClip _countTickSE;
-    [SerializeField] private float _tickInterval = 0.05f;
 
     [Header("Tweet Settings")]
     [SerializeField] private string _tweetTextFormat = "Street Sushi Survivorで {0} 個の寿司を食べました！ #StreetSushiSurvivor";
@@ -59,7 +58,7 @@ public class ResultUI : MonoBehaviour
     private IEnumerator CountScoreRoutine(int targetScore)
     {
         float elapsed = 0f;
-        float lastTickTime = 0f;
+        int count = -1;
 
         while (elapsed < _countDuration)
         {
@@ -70,16 +69,12 @@ public class ResultUI : MonoBehaviour
             if (_sushiCountText != null)
             {
                 _sushiCountText.text = $"{currentDisplayScore}個";
-            }
 
-            // 一定時間ごとにカウント音を鳴らす
-            if (elapsed - lastTickTime >= _tickInterval)
-            {
-                if (SoundManager.Instance != null && _countTickSE != null)
+                if (count != currentDisplayScore && SoundManager.Instance != null && _countTickSE != null)
                 {
+                    count = currentDisplayScore;
                     SoundManager.Instance.PlaySE(_countTickSE);
                 }
-                lastTickTime = elapsed;
             }
 
             yield return null;
