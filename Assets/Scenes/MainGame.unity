@@ -2035,6 +2035,7 @@ GameObject:
   - component: {fileID: 265228217}
   - component: {fileID: 265228221}
   - component: {fileID: 265228222}
+  - component: {fileID: 265228223}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -2141,7 +2142,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265228216}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: -0.000000027533762, z: 0.000000011404856, w: 0.9238796}
+  m_LocalRotation: {x: 0.3826833, y: -0.00000016210241, z: 0.00000006714499, w: 0.9238796}
   m_LocalPosition: {x: -0.03, y: 10, z: -73.770004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2186,6 +2187,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _follow: {fileID: 265228218}
   _followScaleMultiplier: 0.3
+--- !u!114 &265228223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265228216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1024
+  IgnoreTag: 
+  TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  MinimumDistanceFromTarget: 0.3
+  AvoidObstacles:
+    Enabled: 1
+    DistanceLimit: 0
+    MinimumOcclusionTime: 0
+    CameraRadius: 0.4
+    UseFollowTarget:
+      Enabled: 0
+      YOffset: 0
+    Strategy: 1
+    MaximumEffort: 4
+    SmoothingTime: 0
+    Damping: 0.4
+    DampingWhenOccluded: 0.2
+  ShotQualityEvaluation:
+    Enabled: 0
+    OptimalDistance: 10
+    NearLimit: 5
+    FarLimit: 30
+    MaxQualityBoost: 0.2
 --- !u!1001 &275842532
 PrefabInstance:
   m_ObjectHideFlags: 0
