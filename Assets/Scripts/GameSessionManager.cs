@@ -29,6 +29,7 @@ public class GameSessionManager : MonoBehaviour
     [SerializeField] private AudioClip _gameBGM;
     [SerializeField] private AudioClip _gunshotSE;
     [SerializeField] private AudioClip _specialGunshotSE;
+    [SerializeField] private AudioClip _secretEndSE;
     [SerializeField] private string _resultSceneName = "Result";
     [SerializeField] private float _preGunshotDelay = 0.5f;
     [SerializeField] private float _gameOverDelay = 3.0f;
@@ -137,7 +138,7 @@ public class GameSessionManager : MonoBehaviour
 
         if (_remainingTime <= 0)
         {
-            GameOver();
+            GameEnd();
         }
     }
 
@@ -204,7 +205,7 @@ public class GameSessionManager : MonoBehaviour
             if (_currentDay > 50)
             {
                 Time.timeScale = 1f;
-                GameOver(true);
+                GameEnd(GameOverType.Special);
                 yield break;
             }
         }
@@ -246,7 +247,19 @@ public class GameSessionManager : MonoBehaviour
         }
     }
 
-    private void GameOver(bool isSpecial = false)
+    public void TriggerSecretEnd()
+    {
+        GameEnd(GameOverType.Secret);
+    }
+
+    public enum GameOverType
+    {
+        Normal,
+        Special, // 50日目終了
+        Secret   // 落下
+    }
+
+    private void GameEnd(GameOverType type = GameOverType.Normal)
     {
         if (_isGameOver) return;
         _isGameOver = true;
@@ -257,10 +270,10 @@ public class GameSessionManager : MonoBehaviour
             SoundManager.Instance.StopBGM();
         }
 
-        StartCoroutine(GameOverSequence(isSpecial));
+        StartCoroutine(GameEndSequence(type));
     }
 
-    private IEnumerator GameOverSequence(bool isSpecial)
+    private IEnumerator GameEndSequence(GameOverType type)
     {
         // 銃声が鳴る前の短い猶予
         yield return new WaitForSeconds(_preGunshotDelay);
@@ -276,11 +289,14 @@ public class GameSessionManager : MonoBehaviour
         UnityroomApiClient.Instance?.SendScore(1, _totalPoints, ScoreboardWriteMode.HighScoreDesc);
 
         OnGameOver?.Invoke();
-        Debug.Log("Game Over!");
+        Debug.Log($"Game Over! Type: {type}");
 
         if (SoundManager.Instance != null)
         {
-            AudioClip clip = isSpecial && _specialGunshotSE != null ? _specialGunshotSE : _gunshotSE;
+            AudioClip clip = _gunshotSE;
+            if (type == GameOverType.Special) clip = _specialGunshotSE;
+            else if (type == GameOverType.Secret) clip = _secretEndSE;
+
             if (clip != null)
             {
                 SoundManager.Instance.PlaySE(clip);
@@ -296,7 +312,10 @@ public class GameSessionManager : MonoBehaviour
             SceneTransitionUI.Instance.FadeToBlack();
             yield return new WaitForSeconds(1.0f); // フェードアニメーション待ち
         }
-
+        if (type == GameOverType.Secret)
+        {
+            // yield break;
+        }
         SceneManager.LoadScene(_resultSceneName);
     }
 }

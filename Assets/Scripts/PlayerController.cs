@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCooldown = 10f;
     [SerializeField] private float wasabiStunDuration = 2f;
     [SerializeField] private float jumpHeight = 1.5f;
+    [SerializeField] private float fallThreshold = -10f;
 
     [Header("Growth Settings")]
     [SerializeField] private float baseScale = 1f;
@@ -327,6 +328,15 @@ public class PlayerController : MonoBehaviour
 
         // CharacterController を使用した移動
         controller.Move(move * Time.deltaTime);
+
+        // 落下判定
+        if (transform.position.y < fallThreshold && !isDead)
+        {
+            if (GameSessionManager.Instance != null)
+            {
+                GameSessionManager.Instance.TriggerSecretEnd();
+            }
+        }
 
         // アニメーションの更新
         UpdateAnimation(move);
