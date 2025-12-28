@@ -52,3 +52,8 @@ Standard Unity Asset Store EULA
 - Free Sound Effects Pack by Olivier Girardot
 https://assetstore.unity.com/packages/audio/sound-fx/free-sound-effects-pack-155776
 Standard Unity Asset Store EULA
+
+## Material
+- Deep Space Skybox Pack by Sean Duffy
+https://assetstore.unity.com/packages/2d/textures-materials/deep-space-skybox-pack-11056
+Standard Unity Asset Store EULA

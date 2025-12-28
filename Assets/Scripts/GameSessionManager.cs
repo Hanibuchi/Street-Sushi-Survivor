@@ -312,10 +312,19 @@ public class GameSessionManager : MonoBehaviour
             SceneTransitionUI.Instance.FadeToBlack();
             yield return new WaitForSeconds(1.0f); // フェードアニメーション待ち
         }
-        if (type == GameOverType.Secret)
+
+        if (type == GameOverType.Secret && SecretEndUI.Instance != null)
         {
-            // yield break;
+            SecretEndUI.Instance.StartSequence();
         }
+        else
+        {
+            LoadResultScene();
+        }
+    }
+
+    public void LoadResultScene()
+    {
         SceneManager.LoadScene(_resultSceneName);
     }
 }
