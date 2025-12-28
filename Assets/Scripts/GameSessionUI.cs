@@ -95,7 +95,7 @@ public class GameSessionUI : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void OnGameOver()
+    private void OnGameOver(GameSessionManager.GameOverType type)
     {
         gameObject.SetActive(false);
     }

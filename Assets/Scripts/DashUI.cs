@@ -26,7 +26,7 @@ public class DashUI : MonoBehaviour
         }
     }
 
-    private void OnGameOver()
+    private void OnGameOver(GameSessionManager.GameOverType type)
     {
         gameObject.SetActive(false);
     }

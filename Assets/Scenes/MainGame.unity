@@ -13239,7 +13239,8 @@ MonoBehaviour:
   _secretSkybox: {fileID: 2100000, guid: 69e10e886d52d20478f9ed5424126be8, type: 2}
   _secretBGM: {fileID: 8300000, guid: 027d4c4ca41124c41bb179bf23caea72, type: 3}
   _initialDelay: 10
-  _textInterval: 3
+  _fadeDuration: 1
+  _displayDuration: 2
   _endDelay: 10
   _messages:
   - "\u718A\u306F\u3001"

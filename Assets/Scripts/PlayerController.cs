@@ -257,24 +257,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnGameOver()
+    private void OnGameOver(GameSessionManager.GameOverType type)
     {
         isDead = true;
 
-        // 入力を無効化
-        moveAction?.Disable();
-        attackAction?.Disable();
-        dashAction?.Disable();
-        jumpAction?.Disable();
-
-        // 死亡アニメーション
-        if (animator != null)
+        if (type != GameSessionManager.GameOverType.Secret)
         {
-            animator.SetBool("Death", true);
-            SetIdle(false);
-            SetStunned(false);
-            SetRunning(false);
-            SetWalking(false);
+            // 入力を無効化
+            moveAction?.Disable();
+            attackAction?.Disable();
+            dashAction?.Disable();
+            jumpAction?.Disable();
+            // 死亡アニメーション（シークレットエンド以外の場合）
+            if (animator != null)
+            {
+                animator.SetBool("Death", true);
+                SetIdle(false);
+                SetStunned(false);
+                SetRunning(false);
+                SetWalking(false);
+            }
         }
 
         // 寿司センサーを無効化

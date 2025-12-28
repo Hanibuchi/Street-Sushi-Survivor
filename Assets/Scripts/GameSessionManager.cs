@@ -58,7 +58,7 @@ public class GameSessionManager : MonoBehaviour
     public event Action OnSessionStart;
     public event Action OnRoundStart;
     public event Action OnRoundComplete;
-    public event Action OnGameOver;
+    public event Action<GameOverType> OnGameOver;
     public event Action<float> OnTimeChanged;
     public event Action<int, int> OnSushiCountChanged;
     public event Action<int> OnTotalPointsChanged;
@@ -288,7 +288,7 @@ public class GameSessionManager : MonoBehaviour
         // unityroomランキングにスコア送信
         UnityroomApiClient.Instance?.SendScore(1, _totalPoints, ScoreboardWriteMode.HighScoreDesc);
 
-        OnGameOver?.Invoke();
+        OnGameOver?.Invoke(type);
         Debug.Log($"Game Over! Type: {type}");
 
         if (SoundManager.Instance != null)
