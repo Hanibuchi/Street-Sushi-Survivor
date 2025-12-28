@@ -20,9 +20,6 @@ public class ResultUI : MonoBehaviour
     [SerializeField] private AudioClip _resultSE;
     [SerializeField] private AudioClip _countTickSE;
 
-    [Header("Tweet Settings")]
-    [SerializeField] private string _tweetTextFormat = "Street Sushi Survivorで {0} 個の寿司を食べました！ #StreetSushiSurvivor";
-
     private void Awake()
     {
         if (_contentRoot != null) _contentRoot.SetActive(false);
@@ -121,8 +118,7 @@ public class ResultUI : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        // string message = string.Format(_tweetTextFormat, GameManager.Instance.TotalSushiEaten);
-        // string url = "https://twitter.com/intent/tweet?text=" + UnityEngine.Networking.UnityWebRequest.EscapeURL(message);
-        // Application.OpenURL(url);
+        string message = $"Street Sushi Survivorで {GameManager.Instance.TotalSushiEaten} 個の寿司を食べました！";
+        naichilab.UnityRoomTweet.Tweet("street_sushi_survivor", message, "unityroom", "unity1week");
     }
 }
