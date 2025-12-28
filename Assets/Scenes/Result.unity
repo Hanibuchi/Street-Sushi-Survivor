@@ -462,6 +462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _finalBearScale: 2
   _totalPoints: 500
+  _secretEndPlayTime: 0
 --- !u!4 &46088537
 Transform:
   m_ObjectHideFlags: 0
@@ -2731,9 +2732,7 @@ MonoBehaviour:
   _animator: {fileID: 246870926}
   _countDuration: 1.5
   _resultSE: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
-  _countTickSE: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
-  _tweetTextFormat: "Street Sushi Survivor\u3067 {0} \u500B\u306E\u5BFF\u53F8\u3092\u98DF\u3079\u307E\u3057\u305F\uFF01
-    #StreetSushiSurvivor"
+  _countTickSE: {fileID: 8300000, guid: 0994c12e202f342459a4212e7287f7e8, type: 3}
 --- !u!95 &246870926
 Animator:
   serializedVersion: 7
