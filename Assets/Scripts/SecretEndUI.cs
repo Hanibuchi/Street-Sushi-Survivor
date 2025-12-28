@@ -22,15 +22,22 @@ public class SecretEndUI : MonoBehaviour
 
     [Header("Sequence Settings")]
     [SerializeField] private float _initialDelay = 5.0f;
-    [SerializeField] private float _textInterval = 3.0f;
-    [SerializeField] float _endDelay = 10.0f;
+    [SerializeField] private float _fadeDuration = 1.0f;
+    [SerializeField] private float _displayDuration = 2.0f;
+    [SerializeField] private float _endDelay = 10.0f;
     [SerializeField] private List<string> _messages = new List<string>();
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         if (_contentRoot != null) _contentRoot.SetActive(false);
-        if (_messageText != null) _messageText.text = "";
+        if (_messageText != null)
+        {
+            _messageText.text = "";
+            Color c = _messageText.color;
+            c.a = 0f;
+            _messageText.color = c;
+        }
     }
 
     /// <summary>
@@ -71,18 +78,52 @@ public class SecretEndUI : MonoBehaviour
             if (_messageText != null)
             {
                 _messageText.text = msg;
-                // フェードインなどの演出をここに入れても良い
+                
+                // フェードイン
+                yield return StartCoroutine(FadeText(0f, 1f));
+                
+                // 表示維持
+                yield return new WaitForSeconds(_displayDuration);
+                
+                // フェードアウト
+                yield return StartCoroutine(FadeText(1f, 0f));
             }
-            yield return new WaitForSeconds(_textInterval);
         }
 
-        // 演出終了後、数秒待ってからリザルト画面へ（またはタイトルへ）
+        // 演出終了後、数秒待ってからシーン再読み込み
         yield return new WaitForSeconds(_endDelay);
 
-        // リザルト画面へ遷移
-        if (GameSessionManager.Instance != null)
+        // 画面を真っ黒にする
+        if (SceneTransitionUI.Instance != null)
         {
-            GameSessionManager.Instance.LoadResultScene();
+            SceneTransitionUI.Instance.FadeToBlack();
+            yield return new WaitForSeconds(1.0f);
         }
+
+        // BGMを停止
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.StopBGM();
+        }
+
+        // MainGameシーンを再読み込み
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
+    }
+
+    private IEnumerator FadeText(float startAlpha, float endAlpha)
+    {
+        float elapsed = 0f;
+        Color color = _messageText.color;
+
+        while (elapsed < _fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            color.a = Mathf.Lerp(startAlpha, endAlpha, elapsed / _fadeDuration);
+            _messageText.color = color;
+            yield return null;
+        }
+
+        color.a = endAlpha;
+        _messageText.color = color;
     }
 }
