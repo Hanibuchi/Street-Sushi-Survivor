@@ -973,6 +973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _finalBearScale: 0
   _totalPoints: 0
+  _secretEndPlayTime: 0
 --- !u!4 &128821285
 Transform:
   m_ObjectHideFlags: 0

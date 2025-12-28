@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
     [Header("Sensor Settings")]
     [SerializeField] private SushiSensor sushiSensor;
 
+    [Header("Secret End Rewards")]
+    [SerializeField] private GameObject _headSushi;
+
     private float _baseSpeed;
     private float _baseDashCooldown;
     private float _baseShockwaveSizeMultiplier;
@@ -238,6 +241,13 @@ public class PlayerController : MonoBehaviour
         if (animator == null)
         {
             animator = GetComponentInChildren<Animator>();
+        }
+
+        // シークレットエンド達成済みなら頭に寿司をのせる
+        if (_headSushi != null)
+        {
+            bool isAchieved = PlayerPrefs.GetInt("SecretEndAchieved", 0) == 1;
+            _headSushi.SetActive(isAchieved);
         }
 
         if (GameSessionManager.Instance != null)

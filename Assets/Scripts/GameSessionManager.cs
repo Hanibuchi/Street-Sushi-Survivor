@@ -291,6 +291,10 @@ public class GameSessionManager : MonoBehaviour
                 float playTime = Time.time - _sessionStartTime;
                 GameManager.Instance.SaveSecretEndResult(playTime);
                 UnityroomApiClient.Instance?.SendScore(2, playTime, ScoreboardWriteMode.HighScoreAsc);
+
+                // シークレットエンド達成を記録
+                PlayerPrefs.SetInt("SecretEndAchieved", 1);
+                PlayerPrefs.Save();
             }
         }
 
