@@ -46,10 +46,6 @@ public class MobileControlsUI : MonoBehaviour
     {
         // PlayerPrefs から設定を読み込む（デフォルトはプラットフォーム依存）
         bool defaultVisibility = Application.isMobilePlatform;
-        
-#if UNITY_EDITOR
-        defaultVisibility = true;
-#endif
 
         bool isVisible = PlayerPrefs.GetInt("ShowMobileControls", defaultVisibility ? 1 : 0) == 1;
         SetVisible(isVisible);
