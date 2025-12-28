@@ -44,6 +44,7 @@ public class GameSessionManager : MonoBehaviour
     private bool _isGameOver = false;
     private bool _isPaused = false;
     private bool _isSessionActive = false;
+    private float _sessionStartTime;
 
     public int TotalPoints => _totalPoints;
     public int CurrentDay => _currentDay;
@@ -97,6 +98,7 @@ public class GameSessionManager : MonoBehaviour
         _isGameOver = false;
         _sushiEatenInRound = 0;
         _isSessionActive = true;
+        _sessionStartTime = Time.time;
 
         if (SoundManager.Instance != null && _gameBGM != null)
         {
@@ -283,6 +285,13 @@ public class GameSessionManager : MonoBehaviour
         {
             float finalScale = PlayerController.Instance != null ? PlayerController.Instance.CurrentScale : 1.0f;
             GameManager.Instance.SaveResults(finalScale, _totalPoints);
+
+            if (type == GameOverType.Secret)
+            {
+                float playTime = Time.time - _sessionStartTime;
+                GameManager.Instance.SaveSecretEndResult(playTime);
+                UnityroomApiClient.Instance?.SendScore(2, playTime, ScoreboardWriteMode.HighScoreAsc);
+            }
         }
 
         // unityroomランキングにスコア送信

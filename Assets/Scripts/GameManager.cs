@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public float FinalBearScale { get => _finalBearScale; private set => _finalBearScale = value; }
     [SerializeField] int _totalPoints;
     public int TotalSushiEaten { get => _totalPoints; private set => _totalPoints = value; }
+    [SerializeField] float _secretEndPlayTime;
+    public float SecretEndPlayTime { get => _secretEndPlayTime; private set => _secretEndPlayTime = value; }
 
     private void Awake()
     {
@@ -33,5 +35,15 @@ public class GameManager : MonoBehaviour
         FinalBearScale = scale;
         TotalSushiEaten = sushiCount;
         Debug.Log($"Results Saved: Scale={FinalBearScale}, Sushi={TotalSushiEaten}");
+    }
+
+    /// <summary>
+    /// シークレットエンド到達時のプレイ時間を保存します。
+    /// </summary>
+    /// <param name="time">経過時間</param>
+    public void SaveSecretEndResult(float time)
+    {
+        SecretEndPlayTime = time;
+        Debug.Log($"Secret End Reached: Time={SecretEndPlayTime}");
     }
 }
