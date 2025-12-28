@@ -28,16 +28,17 @@ public class GameSessionManager : MonoBehaviour
     [Header("Audio Settings")]
     [SerializeField] private AudioClip _gameBGM;
     [SerializeField] private AudioClip _gunshotSE;
+    [SerializeField] private AudioClip _specialGunshotSE;
     [SerializeField] private string _resultSceneName = "Result";
     [SerializeField] private float _preGunshotDelay = 0.5f;
     [SerializeField] private float _gameOverDelay = 3.0f;
 
     [SerializeField] int _totalPoints = 0;
-    private int _currentDay = 1;
+    [SerializeField] int _currentDay = 1;
     private TimeOfDay _currentTimeOfDay = TimeOfDay.Morning;
     private int _currentRound = 1;
     [SerializeField] float _remainingTime;
-    private int _targetSushi;
+    [SerializeField] int _targetSushi;
     private int _sushiEatenInRound;
     private bool _isGameOver = false;
     private bool _isPaused = false;
@@ -196,7 +197,17 @@ public class GameSessionManager : MonoBehaviour
         // イベントを発火（UIが表示される）
         OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
         if (isDayEnd)
+        {
             OnDayChanged?.Invoke(_currentDay);
+
+            // 50日目終了時に強制ゲームオーバー
+            if (_currentDay > 50)
+            {
+                Time.timeScale = 1f;
+                GameOver(true);
+                yield break;
+            }
+        }
 
         yield return new WaitForSecondsRealtime(_transitionPauseDuration);
         Time.timeScale = 1f;
@@ -235,7 +246,7 @@ public class GameSessionManager : MonoBehaviour
         }
     }
 
-    private void GameOver()
+    private void GameOver(bool isSpecial = false)
     {
         if (_isGameOver) return;
         _isGameOver = true;
@@ -246,10 +257,10 @@ public class GameSessionManager : MonoBehaviour
             SoundManager.Instance.StopBGM();
         }
 
-        StartCoroutine(GameOverSequence());
+        StartCoroutine(GameOverSequence(isSpecial));
     }
 
-    private IEnumerator GameOverSequence()
+    private IEnumerator GameOverSequence(bool isSpecial)
     {
         // 銃声が鳴る前の短い猶予
         yield return new WaitForSeconds(_preGunshotDelay);
@@ -267,9 +278,13 @@ public class GameSessionManager : MonoBehaviour
         OnGameOver?.Invoke();
         Debug.Log("Game Over!");
 
-        if (SoundManager.Instance != null && _gunshotSE != null)
+        if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.PlaySE(_gunshotSE);
+            AudioClip clip = isSpecial && _specialGunshotSE != null ? _specialGunshotSE : _gunshotSE;
+            if (clip != null)
+            {
+                SoundManager.Instance.PlaySE(clip);
+            }
         }
 
         // 倒れてからフェード開始までの待ち時間

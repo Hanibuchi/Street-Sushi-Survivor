@@ -19434,6 +19434,7 @@ MonoBehaviour:
   _bonusUI: {fileID: 390237413}
   _gameBGM: {fileID: 8300000, guid: 21e2712c21816244abb3e058f277c1f4, type: 3}
   _gunshotSE: {fileID: 8300000, guid: 6dd7024f00606b44eb5884197a66a893, type: 3}
+  _specialGunshotSE: {fileID: 8300000, guid: d40330822ccea6140b664c0560d5022f, type: 3}
   _resultSceneName: Result
   _preGunshotDelay: 0.5
   _gameOverDelay: 3
