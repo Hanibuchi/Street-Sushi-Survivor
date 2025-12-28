@@ -4,6 +4,7 @@ public class ResultBear : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Animator _animator;
+    [SerializeField] private GameObject _secretObject;
 
     private void Start()
     {
@@ -12,6 +13,13 @@ public class ResultBear : MonoBehaviour
         {
             float scale = GameManager.Instance.FinalBearScale;
             transform.localScale = new Vector3(scale, scale, scale);
+        }
+
+        // シークレットエンドが開放されている場合、オブジェクトをアクティブにする
+        if (_secretObject != null)
+        {
+            bool isAchieved = PlayerPrefs.GetInt("SecretEndAchieved", 0) == 1;
+            _secretObject.SetActive(isAchieved);
         }
 
         if (_animator == null)
