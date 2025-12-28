@@ -21848,8 +21848,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rareCarProbability: 0.32
-  _fixedInterval: 2
-  _averageRandomInterval: 10
+  _fixedInterval: 0.5
+  _averageRandomInterval: 8
   _explosionDistanceThreshold: 30
 --- !u!4 &1986884091
 Transform:
