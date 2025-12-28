@@ -259,10 +259,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnGameOver(GameSessionManager.GameOverType type)
     {
-        isDead = true;
-
         if (type != GameSessionManager.GameOverType.Secret)
         {
+            isDead = true;
             // 入力を無効化
             moveAction?.Disable();
             attackAction?.Disable();
@@ -293,6 +292,7 @@ public class PlayerController : MonoBehaviour
         SetRootScale(newScale);
     }
 
+    bool triggerSecret = false;
     private void Update()
     {
         if (controller == null || isDead) return;
@@ -332,8 +332,9 @@ public class PlayerController : MonoBehaviour
         controller.Move(move * Time.deltaTime);
 
         // 落下判定
-        if (transform.position.y < fallThreshold && !isDead)
+        if (!triggerSecret && transform.position.y < fallThreshold && !isDead)
         {
+            triggerSecret = true;
             if (GameSessionManager.Instance != null)
             {
                 GameSessionManager.Instance.TriggerSecretEnd();

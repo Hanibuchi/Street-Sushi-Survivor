@@ -12783,7 +12783,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "\u7E70\u308A\u8FD4\u3055\u308C\u308B\u4E16\u754C\u304B\u3089\u629C\u3051\u51FA\u3057\u3001"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: daffa5208a26144439e7a5a98f02cc88, type: 2}
   m_sharedMaterial: {fileID: 8169023160945066186, guid: daffa5208a26144439e7a5a98f02cc88, type: 2}
@@ -12879,7 +12879,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1232597587
 GameObject:
@@ -13236,7 +13236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _contentRoot: {fileID: 2125324458}
   _messageText: {fileID: 1226955623}
-  _secretSkybox: {fileID: 2100000, guid: 69e10e886d52d20478f9ed5424126be8, type: 2}
+  _secretSkybox: {fileID: 2100000, guid: a4be220830e90ea4eb88b48b7fd376ce, type: 2}
   _secretBGM: {fileID: 8300000, guid: 027d4c4ca41124c41bb179bf23caea72, type: 3}
   _initialDelay: 10
   _fadeDuration: 1
