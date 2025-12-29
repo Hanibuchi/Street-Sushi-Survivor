@@ -1,6 +1,7 @@
 # Street Sushi Survivor (ストリート寿司サバイバー)
 
 「一貫の妥協も許さない。俺は、都会の寿司を喰らい尽くす。」
+[![Play Game](https://unityroom.com/games/street_sushi_survivor)]
 
 森から降りてきた一頭の熊となり、大都会の路上に落ちている寿司を制限時間内に食べまくる、3D見下ろし型「寿司・捕食・アクション」ゲーム。
 
