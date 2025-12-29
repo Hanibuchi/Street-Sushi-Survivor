@@ -6,6 +6,7 @@ public class Title : MonoBehaviour
 {
     [Header("Start Settings")]
     [SerializeField] private Button _startButton;
+    [SerializeField] private AudioClip _titleBGM;
     [SerializeField] private AudioClip _startSE;
     [SerializeField] private float _startDelay = 1.5f;
     [SerializeField] private GameObject _titleCamera;
@@ -24,6 +25,12 @@ public class Title : MonoBehaviour
         if (_startButton != null)
         {
             _startButton.onClick.AddListener(OnStartButtonClicked);
+        }
+
+        // タイトルBGMの再生
+        if (SoundManager.Instance != null && _titleBGM != null)
+        {
+            SoundManager.Instance.PlayBGM(_titleBGM);
         }
     }
 
@@ -51,6 +58,11 @@ public class Title : MonoBehaviour
         if (SoundManager.Instance != null && _startSE != null)
         {
             SoundManager.Instance.PlaySE(_startSE);
+        }
+
+        if (SoundManager.Instance != null && _titleBGM != null)
+        {
+            SoundManager.Instance.StopBGM();
         }
 
         // 一定時間後にゲーム開始を通知
