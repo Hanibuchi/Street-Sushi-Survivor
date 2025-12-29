@@ -16,4 +16,12 @@ public class CarCollisionProxy : MonoBehaviour
             _car.OnCollisionEnter(collision);
         }
     }
+    void OnTriggerEnter(Collider other)
+    {
+        if (_car != null)
+        {
+            // インスペクタから渡されたCarのOnCollisionEnterを呼び出す
+            _car.OnTriggerEnter(other);
+        }
+    }
 }

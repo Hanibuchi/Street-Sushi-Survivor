@@ -1,0 +1,343 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+using System;
+using unityroom.Api;
+
+public enum TimeOfDay
+{
+    Morning,
+    Afternoon,
+    Evening
+}
+
+public class GameSessionManager : MonoBehaviour
+{
+    public static GameSessionManager Instance { get; private set; }
+
+    [Header("Session Settings")]
+    [SerializeField] private bool _autoStart = true;
+    [SerializeField] private float _initialRoundTime = 30f;
+    [SerializeField] private float[] _timeIncreasePerDayArray = new float[] { 10f, 15f, 20f };
+    [SerializeField] private int[] _targetSushiPerDayArray = new int[] { 5, 8, 12 };
+    [SerializeField] private float _transitionPauseDuration = 2.0f;
+
+    [Header("Bonus Settings")]
+    [SerializeField] private BonusUI _bonusUI;
+
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip _gameBGM;
+    [SerializeField] private AudioClip _gunshotSE;
+    [SerializeField] private AudioClip _specialGunshotSE;
+    [SerializeField] private AudioClip _secretEndSE;
+    [SerializeField] private string _resultSceneName = "Result";
+    [SerializeField] private float _preGunshotDelay = 0.5f;
+    [SerializeField] private float _gameOverDelay = 3.0f;
+
+    [SerializeField] int _totalPoints = 0;
+    [SerializeField] int _currentDay = 1;
+    private TimeOfDay _currentTimeOfDay = TimeOfDay.Morning;
+    private int _currentRound = 1;
+    [SerializeField] float _remainingTime;
+    [SerializeField] int _targetSushi;
+    private int _sushiEatenInRound;
+    private bool _isGameOver = false;
+    private bool _isPaused = false;
+    private bool _isSessionActive = false;
+    private float _sessionStartTime;
+
+    public int TotalPoints => _totalPoints;
+    public int CurrentDay => _currentDay;
+    public TimeOfDay CurrentTimeOfDay => _currentTimeOfDay;
+    public int CurrentRound => _currentRound;
+    public float RemainingTime => _remainingTime;
+    public int TargetSushi => _targetSushi;
+    public int SushiEatenInRound => _sushiEatenInRound;
+    public bool IsGameOver => _isGameOver;
+    public bool IsSessionActive => _isSessionActive;
+
+    public event Action OnSessionStart;
+    public event Action OnRoundStart;
+    public event Action OnRoundComplete;
+    public event Action<GameOverType> OnGameOver;
+    public event Action<float> OnTimeChanged;
+    public event Action<int, int> OnSushiCountChanged;
+    public event Action<int> OnTotalPointsChanged;
+    public event Action<int> OnDayChanged;
+    public event Action<int> OnRoundChanged;
+    public event Action<TimeOfDay> OnTimeOfDayChanged;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        if (_autoStart)
+        {
+            StartNewSession();
+        }
+    }
+
+    public void StartNewSession()
+    {
+        _totalPoints = 0;
+        _currentDay = 1;
+        _currentTimeOfDay = TimeOfDay.Morning;
+        _currentRound = 1;
+        UpdateTargetSushi();
+        _remainingTime = _initialRoundTime;
+        _isGameOver = false;
+        _sushiEatenInRound = 0;
+        _isSessionActive = true;
+        _sessionStartTime = Time.time;
+
+        if (SoundManager.Instance != null && _gameBGM != null)
+        {
+            SoundManager.Instance.PlayBGM(_gameBGM);
+        }
+
+        OnSessionStart?.Invoke();
+        OnDayChanged?.Invoke(_currentDay);
+        OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
+        OnRoundChanged?.Invoke(_currentRound);
+        OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
+        OnTotalPointsChanged?.Invoke(_totalPoints);
+
+        StartRound();
+    }
+
+    private void UpdateTargetSushi()
+    {
+        if (_targetSushiPerDayArray != null && _targetSushiPerDayArray.Length > 0)
+        {
+            int index = Mathf.Clamp(_currentDay - 1, 0, _targetSushiPerDayArray.Length - 1);
+            _targetSushi = _targetSushiPerDayArray[index];
+        }
+    }
+
+    private void StartRound()
+    {
+        _sushiEatenInRound = 0;
+        _isPaused = false;
+        OnRoundStart?.Invoke();
+    }
+
+    private void Update()
+    {
+        if (!_isSessionActive || _isGameOver || _isPaused) return;
+
+        _remainingTime -= Time.deltaTime;
+        OnTimeChanged?.Invoke(_remainingTime);
+
+        if (_remainingTime <= 0)
+        {
+            GameEnd();
+        }
+    }
+
+    public void OnSushiEaten(int points)
+    {
+        if (!_isSessionActive || _isGameOver) return;
+
+        _totalPoints += points;
+        _sushiEatenInRound += points;
+        OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
+        OnTotalPointsChanged?.Invoke(_totalPoints);
+        Debug.Log($"Sushi Eaten: {points} points, Total: {_totalPoints}, Round: {_sushiEatenInRound}/{_targetSushi}");
+
+
+        if (_sushiEatenInRound >= _targetSushi)
+        {
+            CompleteRound();
+        }
+    }
+
+    public void AddTime(float seconds)
+    {
+        _remainingTime += seconds;
+    }
+
+    private void CompleteRound()
+    {
+        StartCoroutine(CompleteRoundRoutine());
+    }
+
+    private IEnumerator CompleteRoundRoutine()
+    {
+        _isPaused = true;
+        OnRoundComplete?.Invoke();
+
+        bool isDayEnd = false;
+        // Progress Time of Day
+        if (_currentTimeOfDay == TimeOfDay.Morning) _currentTimeOfDay = TimeOfDay.Afternoon;
+        else if (_currentTimeOfDay == TimeOfDay.Afternoon) _currentTimeOfDay = TimeOfDay.Evening;
+        else
+        {
+            _currentTimeOfDay = TimeOfDay.Morning;
+            _currentDay++;
+            isDayEnd = true;
+        }
+
+        // 次のラウンドの準備
+        UpdateTargetSushi();
+        _sushiEatenInRound = 0;
+        OnSushiCountChanged?.Invoke(_sushiEatenInRound, _targetSushi);
+
+        // 演出のための停止
+        Time.timeScale = 0f;
+
+        _currentRound++;
+        OnRoundChanged?.Invoke(_currentRound);
+        // イベントを発火（UIが表示される）
+        OnTimeOfDayChanged?.Invoke(_currentTimeOfDay);
+        if (isDayEnd)
+        {
+            OnDayChanged?.Invoke(_currentDay);
+
+            // 50日目終了時に強制ゲームオーバー
+            if (_currentDay > 50)
+            {
+                Time.timeScale = 1f;
+                GameEnd(GameOverType.Special);
+                yield break;
+            }
+        }
+
+        yield return new WaitForSecondsRealtime(_transitionPauseDuration);
+        Time.timeScale = 1f;
+
+        // 日ごとの追加時間を配列から取得（配列外の場合は最後の要素を使用）
+        float timeIncrease = 0f;
+        if (_timeIncreasePerDayArray != null && _timeIncreasePerDayArray.Length > 0)
+        {
+            int index = Mathf.Clamp(_currentDay - 1, 0, _timeIncreasePerDayArray.Length - 1);
+            timeIncrease = _timeIncreasePerDayArray[index];
+        }
+
+        _remainingTime += timeIncrease;
+
+        if (isDayEnd)
+        {
+            var timeScale = Time.timeScale;
+            Time.timeScale = 0f;
+            ShowBonusUI(() => { Time.timeScale = timeScale; StartRound(); });
+        }
+        else
+        {
+            StartRound();
+        }
+    }
+
+    public void ShowBonusUI(Action callback)
+    {
+        if (_bonusUI != null)
+        {
+            _bonusUI.Show(callback);
+        }
+        else
+        {
+            callback?.Invoke();
+        }
+    }
+
+    public void TriggerSecretEnd()
+    {
+        GameEnd(GameOverType.Secret);
+    }
+
+    public enum GameOverType
+    {
+        Normal,
+        Special, // 50日目終了
+        Secret   // 落下
+    }
+
+    private void GameEnd(GameOverType type = GameOverType.Normal)
+    {
+        if (_isGameOver) return;
+        _isGameOver = true;
+        _isSessionActive = false;
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.StopBGM();
+        }
+
+        StartCoroutine(GameEndSequence(type));
+    }
+
+    private IEnumerator GameEndSequence(GameOverType type)
+    {
+        // 銃声が鳴る前の短い猶予
+        yield return new WaitForSeconds(_preGunshotDelay);
+
+        // 結果をGameManagerに保存
+        if (GameManager.Instance != null)
+        {
+            float finalScale = PlayerController.Instance != null ? PlayerController.Instance.CurrentScale : 1.0f;
+            GameManager.Instance.SaveResults(finalScale, _totalPoints);
+
+            if (type == GameOverType.Secret)
+            {
+                float playTime = Time.time - _sessionStartTime;
+                GameManager.Instance.SaveSecretEndResult(playTime);
+                UnityroomApiClient.Instance?.SendScore(2, playTime, ScoreboardWriteMode.HighScoreAsc);
+
+                // シークレットエンド達成を記録
+                PlayerPrefs.SetInt("SecretEndAchieved", 1);
+                PlayerPrefs.Save();
+            }
+        }
+
+        // unityroomランキングにスコア送信
+        UnityroomApiClient.Instance?.SendScore(1, _totalPoints, ScoreboardWriteMode.HighScoreDesc);
+
+        OnGameOver?.Invoke(type);
+        Debug.Log($"Game Over! Type: {type}");
+
+        if (SoundManager.Instance != null)
+        {
+            AudioClip clip = _gunshotSE;
+            if (type == GameOverType.Special) clip = _specialGunshotSE;
+            else if (type == GameOverType.Secret) clip = _secretEndSE;
+
+            if (clip != null)
+            {
+                SoundManager.Instance.PlaySE(clip);
+            }
+        }
+
+        // 倒れてからフェード開始までの待ち時間
+        yield return new WaitForSeconds(_gameOverDelay);
+
+        // 画面を真っ黒にする
+        if (SceneTransitionUI.Instance != null)
+        {
+            SceneTransitionUI.Instance.FadeToBlack();
+            yield return new WaitForSeconds(1.0f); // フェードアニメーション待ち
+        }
+
+        if (type == GameOverType.Secret && SecretEndUI.Instance != null)
+        {
+            SecretEndUI.Instance.StartSequence();
+        }
+        else
+        {
+            LoadResultScene();
+        }
+    }
+
+    public void LoadResultScene()
+    {
+        SceneManager.LoadScene(_resultSceneName);
+    }
+}

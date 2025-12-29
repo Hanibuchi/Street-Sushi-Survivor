@@ -4,7 +4,7 @@ public class Car : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float _moveSpeed = 5f;
-    [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private LayerMask _collisionLayer;
 
     [Header("Explosion Settings")]
     [SerializeField] private GameObject _explosionPrefab;
@@ -22,6 +22,28 @@ public class Car : MonoBehaviour
     [SerializeField] private AudioClip _hornClip;
 
     private bool _isExploded = false;
+    private float _currentSpeed;
+    private float _originalSpeed;
+
+    public float CurrentSpeed => _currentSpeed;
+
+    private void Start()
+    {
+        _originalSpeed = _moveSpeed;
+        _currentSpeed = _moveSpeed;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        // Debug.Log($"Speed set to: {speed}");
+        _currentSpeed = speed;
+    }
+
+    public void ResetSpeed()
+    {
+        // Debug.Log($"Speed reset to: {_originalSpeed}");
+        _currentSpeed = _originalSpeed;
+    }
 
     private void FixedUpdate()
     {
@@ -30,7 +52,7 @@ public class Car : MonoBehaviour
         // Rigidbodyを使用して前進し続ける
         if (_carRigidbody != null)
         {
-            Vector3 nextPosition = _carRigidbody.position + transform.forward * _moveSpeed * Time.fixedDeltaTime;
+            Vector3 nextPosition = _carRigidbody.position + transform.forward * _currentSpeed * Time.fixedDeltaTime;
             _carRigidbody.MovePosition(nextPosition);
         }
     }
@@ -38,9 +60,19 @@ public class Car : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         if (_isExploded) return;
+        HandleCollision(collision.gameObject, collision.contacts[0].point);
+    }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (_isExploded) return;
+        HandleCollision(other.gameObject, transform.position);
+    }
+
+    void HandleCollision(GameObject obj, Vector3 pos)
+    {
         // 指定したLayer以外のオブジェクトと衝突したら爆発
-        if (((1 << collision.gameObject.layer) & _groundLayer) == 0)
+        if (((1 << obj.layer) & _collisionLayer) != 0)
         {
             Explode();
         }
@@ -65,6 +97,29 @@ public class Car : MonoBehaviour
         if (_isExploded) return;
         _isExploded = true;
 
+        // 寿司の召喚（演出の有無に関わらず実行）
+        if (_sushiPrefab != null)
+        {
+            GameObject spawnedSushi = Instantiate(_sushiPrefab, transform.position, Quaternion.identity);
+            Sushi sushiComponent = spawnedSushi.GetComponentInChildren<Sushi>();
+            if (sushiComponent != null)
+            {
+                sushiComponent.SetIdle();
+            }
+        }
+
+        // プレイヤーから遠い場合は演出なしで即座に破棄
+        if (PlayerController.Instance != null && CarSettings.Instance != null)
+        {
+            float distance = Vector3.Distance(transform.position, PlayerController.Instance.transform.position);
+            if (distance > CarSettings.Instance.ExplosionDistanceThreshold)
+            {
+                if (_rootObject != null) Destroy(_rootObject);
+                else Destroy(gameObject);
+                return;
+            }
+        }
+
         // 屋根の上の寿司を非表示にする
         if (_sushiOnRoof != null)
         {
@@ -80,17 +135,10 @@ public class Car : MonoBehaviour
         // 爆発エフェクトの生成
         if (_explosionPrefab != null)
         {
-            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-        }
-
-        // 寿司の召喚
-        if (_sushiPrefab != null)
-        {
-            GameObject spawnedSushi = Instantiate(_sushiPrefab, transform.position, Quaternion.identity);
-            Sushi sushiComponent = spawnedSushi.GetComponentInChildren<Sushi>();
-            if (sushiComponent != null)
+            GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            if (CarSettings.Instance != null)
             {
-                sushiComponent.SetIdle();
+                explosion.transform.localScale *= CarSettings.Instance.ExplosionScaleMultiplier;
             }
         }
 
@@ -148,7 +196,7 @@ public class Car : MonoBehaviour
     /// </summary>
     public void PlayHorn()
     {
-        Debug.Log($"SoundManager: {SoundManager.Instance != null}, HornClip: {_hornClip != null}");
+        // Debug.Log($"SoundManager: {SoundManager.Instance != null}, HornClip: {_hornClip != null}");
         if (SoundManager.Instance != null && _hornClip != null)
         {
             SoundManager.Instance.PlaySE(_hornClip);

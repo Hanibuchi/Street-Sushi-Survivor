@@ -8,6 +8,8 @@ public class SushiSettings : MonoBehaviour
     [Tooltip("寿司が自動的にデスポーンするまでの時間（秒）")]
     [SerializeField] private float _despawnTime = 10f;
 
+    private float _baseDespawnTime;
+
     public float DespawnTime => _despawnTime;
 
     private void Awake()
@@ -15,6 +17,7 @@ public class SushiSettings : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            _baseDespawnTime = _despawnTime;
             // シーンをまたぐ場合は DontDestroyOnLoad(gameObject); を追加
         }
         else
@@ -23,8 +26,8 @@ public class SushiSettings : MonoBehaviour
         }
     }
 
-    public void SetDespawnTime(float despawnTime)
+    public void SetDespawnTimeMultiplier(float multiplier)
     {
-        _despawnTime = despawnTime;
+        _despawnTime = _baseDespawnTime * multiplier;
     }
 }

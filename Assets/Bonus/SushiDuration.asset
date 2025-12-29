@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3db180a4481e2bb439752b67efda5bd0, type: 3}
+  m_Name: SushiDuration
+  m_EditorClassIdentifier: 
+  bonusName: "\u9632\u8150\u5264in"
+  description: "\u304A\u5BFF\u53F8\u304C\u6D88\u6EC5\u3059\u308B\u307E\u3067\u306E\u6642\u9593\u304C\u5EF6\u3073\u308B\u3002"
+  type: 5
+  upgradeValues:
+  - 100
+  - 150
+  - 200
+  - 250
+  - 300
+  - 350
+  - 400
+  - 450
+  - 500
+  - 550
+  - 600
+  - 650
+  - 700
+  - 750
+  - 800
+  - 850
+  - 900
+  - 950
+  - 1000

@@ -23,9 +23,9 @@ TagManager:
   - Player
   - Explosion
   - Border
-  - 
-  - 
-  - 
+  - WaveShock
+  - CarFollowSensor
+  - SushiSensor
   - 
   - 
   - 
