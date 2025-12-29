@@ -9,6 +9,7 @@ public class Title : MonoBehaviour
     [SerializeField] private AudioClip _startSE;
     [SerializeField] private float _startDelay = 1.5f;
     [SerializeField] private GameObject _titleCamera;
+    [SerializeField] private VolumeSettingsUI _volumeSettingsUI;
 
     private bool _isStarted = false;
 
@@ -38,6 +39,12 @@ public class Title : MonoBehaviour
         if (_titleCamera != null)
         {
             _titleCamera.SetActive(false);
+        }
+
+        // 設定ボタンを非表示にする
+        if (_volumeSettingsUI != null && _volumeSettingsUI.OpenButton != null)
+        {
+            _volumeSettingsUI.OpenButton.gameObject.SetActive(false);
         }
 
         // 効果音を鳴らす

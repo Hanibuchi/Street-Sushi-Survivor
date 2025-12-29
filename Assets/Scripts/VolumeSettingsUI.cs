@@ -12,6 +12,8 @@ public class VolumeSettingsUI : MonoBehaviour
     [SerializeField] private Button _openButton;
     [SerializeField] private Button _closeButton;
 
+    public Button OpenButton => _openButton;
+
     [Header("Audio Settings")]
     [SerializeField] private AudioClip _volumeTestClip;
     [SerializeField] private float _testSEInterval = 0.5f;
