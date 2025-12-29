@@ -21304,6 +21304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startButton: {fileID: 1025021818}
+  _titleBGM: {fileID: 8300000, guid: 5da74eeb2d2a9d743ab2198ebef9e384, type: 3}
   _startSE: {fileID: 8300000, guid: 35fbad8cdde724f11ba6481f1e64af71, type: 3}
   _startDelay: 1.5
   _titleCamera: {fileID: 913910968}
