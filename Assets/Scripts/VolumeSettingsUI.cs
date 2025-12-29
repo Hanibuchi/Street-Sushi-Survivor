@@ -18,23 +18,22 @@ public class VolumeSettingsUI : MonoBehaviour
 
     private float _lastTestSETime;
     private InputAction _menuAction;
-    private float _previousTimeScale = 1f;
 
     private void Awake()
     {
         // InputSystemの"Menu"アクション（Escキーなど）を設定
-        _menuAction = new InputAction("Menu", binding: "<Keyboard>/escape");
-        _menuAction.performed += _ => TogglePanel();
+        // _menuAction = new InputAction("Menu", binding: "<Keyboard>/escape");
+        // _menuAction.performed += _ => TogglePanel();
     }
 
     private void OnEnable()
     {
-        _menuAction?.Enable();
+        // _menuAction?.Enable();
     }
 
     private void OnDisable()
     {
-        _menuAction?.Disable();
+        // _menuAction?.Disable();
     }
 
     private void Start()
@@ -49,7 +48,7 @@ public class VolumeSettingsUI : MonoBehaviour
         // イベントの登録
         _bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
         _seSlider.onValueChanged.AddListener(OnSEVolumeChanged);
-        
+
         if (_mobileControlsToggle != null)
         {
             if (MobileControlsUI.Instance != null)
@@ -58,7 +57,7 @@ public class VolumeSettingsUI : MonoBehaviour
             }
             _mobileControlsToggle.onValueChanged.AddListener(OnMobileControlsToggled);
         }
-        
+
         _openButton.onClick.AddListener(OpenPanel);
         _closeButton.onClick.AddListener(ClosePanel);
 
@@ -114,11 +113,10 @@ public class VolumeSettingsUI : MonoBehaviour
     public void OpenPanel()
     {
         _settingsPanel.SetActive(true);
-        
+
         // 一時停止処理
-        _previousTimeScale = Time.timeScale;
         Time.timeScale = 0f;
-        
+
         // パネルを開いた時に最新の値を反映
         if (SoundManager.Instance != null)
         {
@@ -130,8 +128,8 @@ public class VolumeSettingsUI : MonoBehaviour
     public void ClosePanel()
     {
         _settingsPanel.SetActive(false);
-        
+
         // 再開処理
-        Time.timeScale = _previousTimeScale;
+        Time.timeScale = 1;
     }
 }
