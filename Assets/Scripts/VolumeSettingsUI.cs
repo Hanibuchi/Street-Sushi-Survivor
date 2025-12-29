@@ -22,18 +22,18 @@ public class VolumeSettingsUI : MonoBehaviour
     private void Awake()
     {
         // InputSystemの"Menu"アクション（Escキーなど）を設定
-        // _menuAction = new InputAction("Menu", binding: "<Keyboard>/escape");
-        // _menuAction.performed += _ => TogglePanel();
+        _menuAction = new InputAction("Menu", binding: "<Keyboard>/escape");
+        _menuAction.performed += _ => TogglePanel();
     }
 
     private void OnEnable()
     {
-        // _menuAction?.Enable();
+        _menuAction?.Enable();
     }
 
     private void OnDisable()
     {
-        // _menuAction?.Disable();
+        _menuAction?.Disable();
     }
 
     private void Start()
